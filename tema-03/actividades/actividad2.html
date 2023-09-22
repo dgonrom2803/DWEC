@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script>
+      function parImpar() {
+        var mensaje;
+        var num1 = Number(prompt("Introduzca un número:"));
+        if (num1 == null || num1 == "") {
+          mensaje = "Has cancelado o introducido un número no válido";
+        } else if ((num1 % 2) == 0) {
+          mensaje = num1 + " es par";
+        }else{
+            mensaje = num1 + " es impar";
+        }
+        alert(mensaje);
+      }
+    </script>
+  </head>
+  <body onload="parImpar();"></body>
+</html>

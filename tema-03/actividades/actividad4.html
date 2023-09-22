@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script>
+      function primaNomina() {
+        var mensaje;
+        var prima;
+        var nuevoSueldo;
+        var sueldo = Number(prompt("Introduzca el sueldo del empleado:"));
+        var antiguedad = Number(prompt("Introduzca el número de años del empleado en la empresa: "));
+        if (sueldo == null || sueldo == "") {
+          mensaje = "Has cancelado o introducido un número no válido";
+        } else if (antiguedad == null || antiguedad == "") {
+          mensaje = "Has cancelado o introducido un número no válido";
+        } else if(sueldo<750 && antiguedad>=10){
+            prima =  sueldo * 0.1;
+            nuevoSueldo = sueldo + prima;
+            mensaje = "El empleado recibirá una prima de " + prima + " euros\n y su nuevo sueldo será " + nuevoSueldo;
+        } else if(sueldo>=750 && antiguedad>=10){
+            prima =  sueldo * 0.05;
+            nuevoSueldo = sueldo + prima;
+            mensaje = "El empleado recibirá una prima de " + prima + " euros\n y su nuevo sueldo será " + nuevoSueldo;
+        }else{
+            mensaje = "No obtiene prima";
+        }
+        alert(mensaje);
+      }
+    </script>
+  </head>
+  <body onload="primaNomina();"></body>
+</html>

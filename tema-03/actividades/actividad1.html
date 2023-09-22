@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script>
+      function comparacion() {
+        var mensaje;
+        var num1 = Number(prompt("Introduzca un número:"));
+        var num2 = Number(prompt("Introduzca un segundo número:"));
+        if (num1 == null || num1 == "") {
+          mensaje = "Has cancelado o introducido un número no válido";
+        } else if (num2 == null || num2 == ""){
+          mensaje = "Has cancelado o introducido un número no válido";
+        }else if(num1 > num2){
+            mensaje = num1 + " es mayor que " + num2;
+        }else if (num1 < num2) {
+            mensaje = num2 + " es mayor que " + num1;
+        }else {
+            mensaje = num1 + " es igual a " + num2;
+        }
+        alert(mensaje);
+      }
+    </script>
+  </head>
+  <body onload="comparacion();"></body>
+</html>

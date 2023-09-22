@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script>
+      function menorQueCien() {
+        var mensaje;
+        var num1 = Number(prompt("Introduzca un número:"));
+        var num2 = Number(prompt("Introduzca un segundo número:"));
+        var num3 = Number(prompt("Introduzca un tercer número:"))
+        if (num1 == null || num1 == "") {
+          mensaje = "Has cancelado o introducido un número no válido";
+        } else if (num2 == null || num2 == ""){
+          mensaje = "Has cancelado o introducido un número no válido";
+        }else if (num3 == null || num3 == ""){
+          mensaje = "Has cancelado o introducido un número no válido";
+        } else if (num1<100 && num2<100 && num3<100 && num1>10 && num2>10 && num3>10){
+            mensaje = "Ok";
+        }else {
+            mensaje = "No cumple";
+        }
+        alert(mensaje);
+      }
+    </script>
+  </head>
+  <body onload="menorQueCien();"></body>
+</html>
