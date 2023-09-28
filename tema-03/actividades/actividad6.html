@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script>
+      function ecuacion() {
+
+        var mensaje;
+        var resultado1;
+        var resultado2;
+
+        var num1 = Number(prompt("Introduzca la primera variable :"));
+        var num2 = Number(prompt("Introduzca la segunda varibale: "));
+        var num3 = Number(prompt("Introduzca la tercera variable: "));
+
+        if (num1 == null || num1 == "" || num2 == null || num2 == ""|| num3 == null|| num3 == "" ) {
+          mensaje = "Has cancelado o introducido un número no válido";
+        } else if (num1 == 0){
+            mensaje = "No es posible realizar la ecuación, ya que habría dividir entre 0"
+        } else {
+            resultado1 = (-num2 + Math.sqrt(Math.pow(num2,2) - (4 * num1 * num3))) / (2* num1);
+            resultado2 = (-num2 - Math.sqrt(Math.pow(num2,2) - (4 * num1 * num3))) / (2* num1);
+            mensaje = "Los resultados son: x = " + resultado1 + " y x = " + resultado2;
+        
+        }
+        
+        alert(mensaje);
+      }
+    </script>
+  </head>
+  <body onload="ecuacion();"></body>
+</html>

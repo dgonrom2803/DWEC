@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script>
+      function mayorAMenor() {
+        var mensaje;
+        var num1 = Number(prompt("Introduzca el primer número:"));
+        var num2 = Number(prompt("Introduzca el segundo numero: "));
+        var num3 = Number(prompt("Introduzca el tercer numero: "));
+
+        if (num1 == null || num1 == "" || num2 == null || num2 == ""|| num3 == null|| num3 == "" ) {
+          mensaje = "Has cancelado o introducido un número no válido";
+        } else if (num1>=num2 && num1>=num3 && num2>=num3){
+        mensaje = "El orden es " + num1 + " " + num2 + " " + num3;
+
+        } else if (num1>=num2 && num1>=num3 && num2<=num3){
+        mensaje = "El orden es " + num1 + " " + num3 + " " + num2;
+
+        } else if (num2>=num1 && num2>=num3 && num1>=num3){
+        mensaje = "El orden es " + num2 + " " + num1 + " " + num3;
+
+        } else if (num2>=num1 && num2>=num3 && num1<=num3){
+        mensaje = "El orden es " + num2 + " " + num3 + " " + num1;
+
+        } else if (num3>=num1 && num3>=num2 && num1>=num2){
+        mensaje = "El orden es " + num3 + " " + num1 + " " + num2;
+
+        } else if (num3>=num1 && num3>=num2 && num1<=num2){
+        mensaje = "El orden es " + num3 + " " + num2 + " " + num1;
+        }
+
+        alert(mensaje);
+      }
+    </script>
+  </head>
+  <body onload="mayorAMenor();"></body>
+</html>

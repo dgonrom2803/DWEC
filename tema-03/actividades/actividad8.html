@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script>
+      function descomposicionPrimos() {
+        var num1 = Number(
+          prompt(
+            "Ingresa un número entero para descomponerlo en factores primos:"
+          )
+        );
+
+        if (num1 > 1) {
+          //Declaramos las variables del divisor y el resultado para poder realizar las operaciones y almacenarlas.
+          var divisor = 2;
+          var resultado = "";
+
+          //En un bucle while, hacemos que mientras que el número introducido se mayor que 1 se siga ejecutando.
+          while (num1 > 1) {
+            //Con un if 
+            if (num1 % divisor == 0) {
+              resultado += divisor;
+              num1 /= divisor;
+
+              if (num1 > 1) {
+                resultado += " * ";
+              }
+            } else {
+              divisor++;
+            }
+          }
+
+          alert("(" + resultado + ")");
+        } else {
+          alert("Por favor, ingresa un número entero y mayor que 1.");
+        }
+      }
+    </script>
+  </head>
+
+  <body onload="javascript:descomposicionPrimos()" ;></body>
+</html>

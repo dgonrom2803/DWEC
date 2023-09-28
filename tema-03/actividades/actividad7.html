@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script>
+      function factorial() {
+        var mensaje;
+        var num1 = Number(
+          prompt("Introduzca un número para hacer su factorial :")
+        );
+        var factorial = num1;
+
+        if (num1 == 0) {
+          mensaje = "El factorial es: 1";
+        } else if (num1 == "") {
+          mensaje = "Has cancelado o introducido un número no válido";
+        } else {
+          for (var indice = num1 - 1; indice >= 1; indice--) {
+            factorial = factorial * indice;
+          }
+          mensaje = "El factorial es: " + factorial;
+        }
+
+        alert(mensaje);
+      }
+    </script>
+  </head>
+  <body onload="factorial();"></body>
+</html>
