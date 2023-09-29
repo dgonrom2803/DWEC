@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script>
+      function menu() {
+        var opcion = Number(
+          prompt(
+            "Elige una opcion:\n 1. Elija una figura.\n 2. Introduzca los valores de las variables.\n 3. Calculo de volumen.\n 4. Calculo de area\n 5. Finalizar"
+          )
+        );
+        var figura;
+        while (opcion != 5) {
+          switch (opcion) {
+            case 1:
+             seleccionFigura(figura);
+             
+             
+            case 2:
+              variables(figura);
+              break;
+            case 3:
+              alert("valor 3");
+              break;
+            case 4:
+              alert("valor 3");
+              break;
+            case 5:
+              alert("valor 3");
+              break;
+            default:
+              alert("defecto");
+              break;
+          }
+        }
+      }
+
+      function seleccionFigura(figuraSeleccionada) {
+        var figuraSeleccionada = Number(prompt("Seleccione una figura:\n 1. Cubo\n 2. Esfera\n 3. Cilindro\n"));
+        return figuraSeleccionada;
+        menu();
+      }
+      function variables(x) {
+        if ( x == 1) {
+          lado = Number(prompt("Introduzca el lado del cubo en cm:"));
+          menu();
+        } else if ( x == 2) {
+          radio = Number(prompt("Introduzca el radio de la esfera en cm:"));
+          menu();
+        } else if ( x == 3) {
+          radio2 = Number(prompt("Introduzca el radio del cilindro en cm:"));
+          altura = Number(prompt("Introduzca la altura del cilindro en cm:"));
+          menu();
+        } else {
+          alert("Has introducido un valor no valido");
+          menu();
+        }
+      }
+    </script>
+  </head>
+  <body onload="menu();"></body>
+</html>
