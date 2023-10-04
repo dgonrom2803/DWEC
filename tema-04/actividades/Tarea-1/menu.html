@@ -3,56 +3,96 @@
   <head>
     <script>
       function menu() {
-        var opcion = Number(
-          prompt(
-            "Elige una opcion:\n 1. Elija una figura.\n 2. Introduzca los valores de las variables.\n 3. Calculo de volumen.\n 4. Calculo de area\n 5. Finalizar"
-          )
-        );
-        var figura;
         while (opcion != 5) {
+          var opcion = Number(
+            prompt(
+              "Elige una opcion:\n 1. Elija una figura.\n 2. Introduzca los valores de las variables.\n 3. Cálculo de volumen.\n 4. Cálculo de area\n 5. Finalizar"
+            )
+          );
+
+          var figura;
+          var variable;
           switch (opcion) {
             case 1:
-             seleccionFigura(figura);
-             
-             
+              figura = seleccionFigura();
+              break;
             case 2:
-              variables(figura);
+              variable = variables(figura);
               break;
             case 3:
-              alert("valor 3");
+              volumen(figura, variable);
               break;
             case 4:
-              alert("valor 3");
+              area(figura, variable);
               break;
             case 5:
-              alert("valor 3");
-              break;
+              alert("Programa finalizado");
             default:
-              alert("defecto");
               break;
           }
         }
       }
 
-      function seleccionFigura(figuraSeleccionada) {
-        var figuraSeleccionada = Number(prompt("Seleccione una figura:\n 1. Cubo\n 2. Esfera\n 3. Cilindro\n"));
+      function seleccionFigura() {
+        var figuraSeleccionada = Number(
+          prompt("Seleccione una figura:\n 1. Cubo\n 2. Esfera\n 3. Cilindro\n")
+        );
         return figuraSeleccionada;
-        menu();
       }
+
       function variables(x) {
-        if ( x == 1) {
+        if (x == 1) {
           lado = Number(prompt("Introduzca el lado del cubo en cm:"));
-          menu();
-        } else if ( x == 2) {
+          return lado;
+        } else if (x == 2) {
           radio = Number(prompt("Introduzca el radio de la esfera en cm:"));
-          menu();
-        } else if ( x == 3) {
+          return radio;
+        } else if (x == 3) {
           radio2 = Number(prompt("Introduzca el radio del cilindro en cm:"));
           altura = Number(prompt("Introduzca la altura del cilindro en cm:"));
-          menu();
+          return [radio2, altura];
         } else {
           alert("Has introducido un valor no valido");
-          menu();
+        }
+      }
+
+      function volumen(x, variable) {
+        if (x == 1) {
+          resultado = Math.pow(variable, 3);
+          alert(
+            "El volumen del cubo es: " + resultado.toFixed(2) + " centímetros cúbicos"
+          );
+        } else if (x == 2) {
+          var resultado = (4 / 3) * Math.PI * Math.pow(variable, 3);
+          alert(
+            "El volumen de la esfera es: " + resultado.toFixed(2) + " centímetros cúbicos"
+          );
+        } else if (x == 3) {
+          var resultado = Math.PI * Math.pow(variable[0], 2) * variable[1];
+          alert(
+            "El volumen del cilindro es: " + resultado.toFixed(2) + " centímetros cúbicos"
+          );
+        } else {
+          alert("Has introducido un valor no válido");
+        }
+      }
+
+      function area(x, variable) {
+        if (x == 1) {
+          resultado = Math.pow(variable, 2);
+          alert("El área del cubo es: " + resultado.toFixed(2) + " centímetros cuadrados");
+        } else if (x == 2) {
+          var resultado = 4 * Math.PI * Math.pow(variable, 2);
+          alert(
+            "El área de la esfera es: " + resultado.toFixed(2) + " centímetros cuadrados"
+          );
+        } else if (x == 3) {
+          var resultado = (2 * Math.PI * variable[0] * variable[1]) + (2 * Math.PI * Math.pow(variable[0], 2)); 
+          alert(
+            "El área del cilindro es: " + resultado.toFixed(2) + " centímetros cúbicos"
+          );
+        } else {
+          alert("Has introducido un valor no válido");
         }
       }
     </script>
