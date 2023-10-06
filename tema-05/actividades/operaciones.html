@@ -1,35 +1,73 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
+  <head>
     <script>
-        function entrada(){
-            var datos = [];
-            var orden = 1;
-            // var entrada = prompt("Introduce el dato número " + orden)
-            for (let indice = 0; entrada != "f"; orden++) {
-                var entrada = prompt("Introduce el dato número " + orden)
-                datos.push(entrada);
+      function entrada() {
+        var datos = [];
+        var orden = 1;
+
+        for (let indice = 0; entrada != "f" ; orden++) {
+          var entrada = prompt(
+            "Introduce el dato número " +
+              orden +
+              "\nPara terminar de introducir datos, introduzca f"
+          );
+
+          if (entrada != "f") {
+            datos.push(entrada);
+          } else {
+                media(datos);
+                rango(datos);
+                moda(datos);
             }
+          }
+        }
+      
 
-            media();
+      function media(x) {
+        var suma = 0;
+        for (let indice = 0; indice < x.length; indice++) {
+          suma += Number(x[indice]);
+        }
+        var mediaCalculada = suma / x.length;
+
+        alert("La media de los valores introducidos es: " + mediaCalculada);
+      }
+
+      function rango(x) {
+        var min = Number(x[0]);
+        var max = Number(x[0]);
+
+        for (var i = 0; i < x.length; i++) {
+          if (Number(x[i]) < min) {
+            min = x[i];
+          }
+        }
+        for (var i = 0; i < x.length; i++) {
+          if (Number(x[i]) > max) {
+            max = x[i];
+          }
         }
 
-        function media(x){
-            
+        var rangoCalculado = max - min;
+        alert("El rango de los números introducidos es: " + rangoCalculado);
+      }
 
+      function moda(x) {
+        var indice = 0;
+        var contador = 0;
+
+        for (var i = 0; i < x.length; i++) {
+            if (Number(x[indice]) == Number(x[i])){
+                contador = contador + 1;
+            } else{
+                indice++;
+            }
         }
+        alert("La moda de los números introducidos es: " + x[i])
 
-        function rango(){
-
-        }
-
-        function moda(){
-
-        }
-
+      }
     </script>
-</head>
-<body onload="entrada();">
-    
-</body>
+  </head>
+  <body onload="entrada();"></body>
 </html>
