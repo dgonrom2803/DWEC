@@ -5,24 +5,25 @@
       function entrada() {
         var datos = [];
         var orden = 1;
+        var entrada = "";
 
-        for (let indice = 0; entrada != "f" ; orden++) {
+        for (let indice = 0; entrada != "f"; orden++) {
           var entrada = prompt(
             "Introduce el dato número " +
               orden +
               "\nPara terminar de introducir datos, introduzca f"
           );
+          if (entrada == null) return;
 
           if (entrada != "f") {
             datos.push(entrada);
           } else {
-                media(datos);
-                rango(datos);
-                moda(datos);
-            }
+            media(datos);
+            rango(datos);
+            moda(datos);
           }
         }
-      
+      }
 
       function media(x) {
         var suma = 0;
@@ -54,18 +55,28 @@
       }
 
       function moda(x) {
-        var indice = 0;
-        var contador = 0;
-
-        for (var i = 0; i < x.length; i++) {
-            if (Number(x[indice]) == Number(x[i])){
-                contador = contador + 1;
-            } else{
-                indice++;
-            }
+        if (x.length === 0) {
+          return null;
         }
-        alert("La moda de los números introducidos es: " + x[i])
+        var contador = [];
+        for (var indice = 0; indice < x.length; indice++) {
+          var numero = x[indice];
+          contador[numero] = (contador[numero] || 0) + 1;
+        }
 
+        var moda = null;
+        var maxFrecuencia = 0;
+
+        for (var indice in contador) {
+          if (contador[indice] > maxFrecuencia) {
+            moda = parseFloat(indice);
+            maxFrecuencia = contador[indice];
+          } else {
+            alert("No tiene moda");
+          }
+        }
+
+        alert("La moda es: " + moda);
       }
     </script>
   </head>
