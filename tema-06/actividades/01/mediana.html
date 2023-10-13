@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <script>
+      function entrada() {
+        var datos = [];
+        var orden = 1;
+        var entrada = "";
+
+        for (let indice = 0; entrada != "f"; orden++) {
+          var entrada = prompt(
+            "Introduce el dato número " +
+              orden +
+              "\nPara terminar de introducir datos, introduzca f"
+          );
+          if (entrada == null) return;
+
+          if (entrada != "f") {
+            datos.push(entrada);
+          } else {
+           mediana(datos);
+          }
+        }
+      }
+
+      function mediana(x) {
+        var n = x.length;
+        x.sort(function (a,b){return a-b}) ;
+        var mediaCalculada;
+       
+        if ((n % 2) == 0){
+            mediaCalculada=((x[n/2 - 1] + x[n/2]) / 2);
+            alert ("La mediana es: " + mediaCalculada);
+           
+        }else{
+            mediaCalculada=(x[n/2]);
+            alert ("La mediana es: " + mediaCalculada);
+        }
+           
+        }
+
+        
+      
+      
+
+    </script>
+  </head>
+  <body onload="entrada();"></body>
+</html>
