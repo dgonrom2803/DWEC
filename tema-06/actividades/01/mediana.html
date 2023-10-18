@@ -24,17 +24,24 @@
       }
 
       function mediana(x) {
-        var n = x.length;
+        var longitud = x.length;
         x.sort(function (a,b){return a-b}) ;
-        var mediaCalculada;
        
-        if ((n % 2) == 0){
-            mediaCalculada=((x[n/2 - 1] + x[n/2]) / 2);
-            alert ("La mediana es: " + mediaCalculada);
+        if ((longitud % 2) == 0){
+            var mediana1posicion = longitud / 2;
+            var mediana2posicion = mediana1posicion - 1;
+
+            var mediana1 = Number(x[mediana1posicion]);
+            var mediana2 = Number(x[mediana2posicion]);
+
+            var medianaTotal = (mediana2 + mediana1) / 2;
+            
+            alert ("La mediana es: " + medianaTotal);
            
         }else{
-            mediaCalculada=(x[n/2]);
-            alert ("La mediana es: " + mediaCalculada);
+             var medianaPosicion = longitud / 2;
+             var medianaTotal = Number(x[medianaPosicion - (1/2)]);
+            alert ("La mediana es: " + medianaTotal);
         }
            
         }
