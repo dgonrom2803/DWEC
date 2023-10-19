@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script>
+
+      function entrada() {
+        // Declaro el array bidimensional
+        var temperaturas = [];
+        // Declaro el array vacío que actuará como zona
+        var zona = [];
+        // Declaro el valor de entrada 
+        var entrada = String;
+
+        while (entrada != null) {
+          
+          entrada = prompt(
+            "Introduce la temperatura de los sensores de la zona \nPara pasar a la siguiente zona, introduzca c \nPara separar entre pares e impares pulse f"
+          );
+
+          if (entrada == null) {
+
+            alert("Has finalizado el programa");
+
+          } else if (entrada == "c") {
+            // Mandamos los datos de la zona al array bidimensional
+            temperaturas.push(zona);
+            // Reiniciamos la variable para empezar una nueva zona
+            var zona = [];
+
+          } else if (entrada == "f") {
+            temperaturas.push(zona);
+            // Separar los números pares de los impares
+            calcularMedias(temperaturas);
+            break;
+
+          } else {
+            zona.push(entrada);
+
+          }
+        }
+      }
+
+      function calcularMedias(array) {
+        var suma = 0;
+        var sumaTotal = 0;
+        var mediaTotal = []; 
+
+        // Recorrer el array bidimensional
+        for (var i = 0; i < array.length; i++) {
+          for (var j = 0; j < array[i].length; j++) {
+            suma += Number(array[i][j]);
+        }
+        var mediaZona = suma / Number(array[i].length);
+        mediaTotal.push(mediaZona);
+        sumaTotal += Number(mediaTotal[i]);
+
+        alert("La media de la zona es: " + mediaZona);
+
+
+          
+        }
+        var mediaTotalCalculada = sumaTotal / mediaTotal.length;
+        alert("La media total es: " + mediaTotalCalculada);
+      }
+    </script>
+  </head>
+  <body onload="entrada()"></body>
+</html>
