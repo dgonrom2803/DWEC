@@ -2,28 +2,60 @@
 <html lang="en">
   <head>
     <script>
+
       function entrada() {
-        var fila = [];
         var matriz = [];
+        var fila = [];
         var entrada = String;
 
         while (entrada != null) {
-            entrada = prompt(
-            "Introduce el dato número \nPara terminar de introducir datos, introduzca f");
-            
-            if (entrada == null){
-                alert("Has introducido un valor no válido");
-            }else if (entrada == "c"){
-                matriz.push(fila);
+          entrada = prompt(
+            "Introduce los elementos del array a introducir en la fila \nPara terminar de introducir datos en la fila, introduzca c \nPara separar entre pares e impares pulse f"
+          );
 
-            } else {
-                fila.push(entrada);
-            }
+          if (entrada == null) {
+            alert("Has finalizado el programa");
+
+          } else if (entrada == "c") {
+            matriz.push(fila);
+            var fila = [];
+
+          } else if (entrada == "f") {
+            matriz.push(fila);
+            // Separar los números pares de los impares
+            var arrays = separarParesImpares(matriz);
+
+            // Mostrar los arrays en una alerta
+            alert("Array de pares: " + arrays[0] + "\nArray de impares: " + arrays[1]);
+            break;
+
+          } else {
+            fila.push(entrada);
+
+          }
         }
+      }
 
+      function separarParesImpares(array) {
+        
+        var pares = new Array();
+        var impares = new Array();
 
+        // Recorrer el array bidimensional
+        for (var i = 0; i < array.length; i++) {
+          for (var j = 0; j < array[i].length; j++) {
 
-       
+            // Si el valor es par, añadirlo al array de pares
+            if (array[i][j] % 2 == 0) {
+              pares.push(array[i][j]);
+            }
+            // Si el valor es impar, añadirlo al array de impares
+            else {
+              impares.push(array[i][j]);
+            }
+          }
+        }
+        return [pares, impares];
       }
     </script>
   </head>
