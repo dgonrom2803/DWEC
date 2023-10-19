@@ -4,20 +4,27 @@
     <script>
 
       function entrada() {
+        // Declaro el array bidimensional
         var matriz = [];
+        // Declaro el array vacío que actuará como fila
         var fila = [];
+        // Declaro el valor de entrada 
         var entrada = String;
 
         while (entrada != null) {
+          
           entrada = prompt(
             "Introduce los elementos del array a introducir en la fila \nPara terminar de introducir datos en la fila, introduzca c \nPara separar entre pares e impares pulse f"
           );
 
           if (entrada == null) {
+
             alert("Has finalizado el programa");
 
           } else if (entrada == "c") {
+            // Mandamos los datos de la fila al array bidimensional
             matriz.push(fila);
+            // Reiniciamos la variable para empezar una nueva fila
             var fila = [];
 
           } else if (entrada == "f") {
