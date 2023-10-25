@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <script>
+      function menu() {
+        var opcion = Number(
+            prompt(
+              "Elige una opcion:\n 1. Ver cesta.\n 2. Insertar un articulo.\n 3. Borrar un articulo.\n 4. Vaciar cesta\n 5. Finalizar"
+            )
+          );
+        while (opcion != null) {
+
+          switch (opcion) {
+            case 1:
+              break;
+            case 2:
+              introducir();
+              break;
+            case 3:
+              break;
+            case 4:
+              break;
+            case 5:
+              alert("Programa finalizado");
+              opcion = null;
+            default:
+              break;
+          }
+        }
+      }
+
+      function introducir() {
+        var nombreIntroducido = prompt("Introduce el nombre del articulo");
+        var precioIntroducido = prompt("Introduce el precio del articulo");
+        var cantidadIntroducida = prompt("Introduce la cantidad de articulos");
+        var articulo = {
+          nombreIntroducido,
+          precioIntroducido,
+          cantidadIntroducida,
+        };
+
+        return articulo;
+      }
+    </script>
+  </head>
+  <body onload="menu();"></body>
+</html>
