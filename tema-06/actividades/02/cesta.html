@@ -1,47 +1,83 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <script>
-      function menu() {
-        var opcion = Number(
-            prompt(
-              "Elige una opcion:\n 1. Ver cesta.\n 2. Insertar un articulo.\n 3. Borrar un articulo.\n 4. Vaciar cesta\n 5. Finalizar"
-            )
-          );
-        while (opcion != null) {
 
-          switch (opcion) {
-            case 1:
-              break;
-            case 2:
-              introducir();
-              break;
-            case 3:
-              break;
-            case 4:
-              break;
-            case 5:
-              alert("Programa finalizado");
-              opcion = null;
-            default:
-              break;
-          }
+<head>
+  <script>
+    function menu() {
+      var cesta = [];
+      var contador = 0;
+      while (opcion != 5) {
+        var opcion = Number(
+          prompt(
+            "Elige una opcion:\n 1. Ver cesta.\n 2. Insertar un articulo.\n 3. Borrar un articulo.\n 4. Vaciar cesta\n 5. Finalizar"
+          )
+        );
+
+        switch (opcion) {
+          case 1:
+            verCesta(cesta);
+            break;
+          case 2:
+            var articulo = crearArticulo(contador);
+            introducir(cesta, articulo);
+            break;
+          case 3:
+          borrarArticulo(cesta);
+            break;
+          case 4:
+            vaciarCesta(cesta);
+            break;
+          case 5:
+            alert("Programa finalizado");
+            opcion = null;
+          default:
+            break;
         }
       }
+    }
 
-      function introducir() {
-        var nombreIntroducido = prompt("Introduce el nombre del articulo");
-        var precioIntroducido = prompt("Introduce el precio del articulo");
-        var cantidadIntroducida = prompt("Introduce la cantidad de articulos");
-        var articulo = {
-          nombreIntroducido,
-          precioIntroducido,
-          cantidadIntroducida,
-        };
-
-        return articulo;
+    function verCesta(array) {
+      var mensaje = "Cesta: \n";
+      for (var i = 0; i < array.length; i++) {
+        mensaje += "ID: " + array[i].id + " - Nombre: " + array[i].nombreIntroducido + " - Precio: " + array[i].precioIntroducido + " - Cantidad: " + array[i].cantidadIntroducida + "\n";
       }
-    </script>
-  </head>
-  <body onload="menu();"></body>
+      alert(mensaje);
+      return mensaje;
+    }
+
+    function crearArticulo(contador) {
+      var nombreIntroducido = prompt("Introduce el nombre del articulo");
+      var precioIntroducido = prompt("Introduce el precio del articulo");
+      var cantidadIntroducida = prompt("Introduce la cantidad de articulos");
+      var articulo = {
+        id: ++contador,
+        nombreIntroducido,
+        precioIntroducido,
+        cantidadIntroducida,
+      };
+
+      return articulo;
+    }
+
+    function introducir(array, articulo) {
+
+      array.push(articulo);
+
+    }
+
+    function borrarArticulo(cesta) {
+      var id = Number(prompt("Introduce el ID del articulo a borrar"));
+      cesta = cesta.filter(articulo => articulo.id !== id);
+    }
+
+    function vaciarCesta(x) {
+      x = [];
+      return x;
+
+    }
+  </script>
+</head>
+
+<body onload="menu();"></body>
+
 </html>
