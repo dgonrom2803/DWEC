@@ -1,83 +1,107 @@
 <!DOCTYPE html>
 <html lang="es">
+  <head>
+    <script>
+      function menu() {
+        var cesta = [];
+        
 
-<head>
-  <script>
-    function menu() {
-      var cesta = [];
-      var contador = 0;
-      while (opcion != 5) {
-        var opcion = Number(
-          prompt(
+        while (opcion != "5") {
+          var opcion = prompt(
             "Elige una opcion:\n 1. Ver cesta.\n 2. Insertar un articulo.\n 3. Borrar un articulo.\n 4. Vaciar cesta\n 5. Finalizar"
-          )
-        );
+          );
+          if (opcion == null) return;
 
-        switch (opcion) {
-          case 1:
-            verCesta(cesta);
-            break;
-          case 2:
-            var articulo = crearArticulo(contador);
-            introducir(cesta, articulo);
-            break;
-          case 3:
-          borrarArticulo(cesta);
-            break;
-          case 4:
-            vaciarCesta(cesta);
-            break;
-          case 5:
-            alert("Programa finalizado");
-            opcion = null;
-          default:
-            break;
+          switch (opcion) {
+            case "1":
+              verCesta(cesta);
+              break;
+            case "2":
+              var articulo = crearArticulo(cesta);
+              introducir(cesta, articulo);
+              break;
+            case "3":
+              borrarArticulo(cesta);
+              break;
+            case "4":
+              vaciarCesta(cesta);
+              break;
+            case "5":
+              alert("Programa finalizado");
+              opcion = null;
+            default:
+              break;
+          }
         }
       }
-    }
 
-    function verCesta(array) {
-      var mensaje = "Cesta: \n";
-      for (var i = 0; i < array.length; i++) {
-        mensaje += "ID: " + array[i].id + " - Nombre: " + array[i].nombreIntroducido + " - Precio: " + array[i].precioIntroducido + " - Cantidad: " + array[i].cantidadIntroducida + "\n";
+      function verCesta(array) {
+        var total = 0;
+        var mensaje =
+          "Cesta: \nID:     -      Nombre:      -      Precio:      -    Cantidad:      -     Subtotal:\n"  + "----------------------------------------------------------------------------\n";
+        for (var i = 0; i < array.length; i++) {
+          if (array[i].id == 0) {
+            
+          } else {
+            mensaje +=
+            array[i].id +
+            "                   " +
+            array[i].nombreIntroducido +
+            "                    " +
+            array[i].precioIntroducido + "€" +
+            "                       " +
+            array[i].cantidadIntroducida +
+            "                       " +
+            array[i].subtotal + "€"+
+            "\n"+ "----------------------------------------------------------------------------\n";
+
+          }
+          total += array[i].subtotal;
+        }
+
+
+        
+        alert(mensaje + "                                                                                TOTAL: " + total + "€");
+        return mensaje;
       }
-      alert(mensaje);
-      return mensaje;
-    }
+    
 
-    function crearArticulo(contador) {
-      var nombreIntroducido = prompt("Introduce el nombre del articulo");
-      var precioIntroducido = prompt("Introduce el precio del articulo");
-      var cantidadIntroducida = prompt("Introduce la cantidad de articulos");
-      var articulo = {
-        id: ++contador,
-        nombreIntroducido,
-        precioIntroducido,
-        cantidadIntroducida,
-      };
+      function crearArticulo(array) {
+        var id = array.length + 1;
+        var nombreIntroducido = prompt("Introduce el nombre del articulo");
+        var precioIntroducido = prompt("Introduce el precio del articulo");
+        var cantidadIntroducida = prompt("Introduce la cantidad de articulos");
+        var subtotal = precioIntroducido * cantidadIntroducida;
+        var articulo = {
+          id,
+          nombreIntroducido,
+          precioIntroducido,
+          cantidadIntroducida,
+          subtotal
+        };
 
-      return articulo;
-    }
+        return articulo;
+      }
 
-    function introducir(array, articulo) {
+      function introducir(array, articulo) {
+        array.push(articulo);
+      }
 
-      array.push(articulo);
+      function borrarArticulo(array) {
+        var id = Number(prompt("Introduce el ID del articulo a borrar"));
+        for (var i = 0; i < array.length; i++){
+          if (array[i].id == id) {
+            array[i].id = 0;
+            array[i].subtotal = 0;
+          }
+        }
+      }
 
-    }
+      function vaciarCesta(array) {
+        array.length = 0;
+      }
+    </script>
+  </head>
 
-    function borrarArticulo(cesta) {
-      var id = Number(prompt("Introduce el ID del articulo a borrar"));
-      cesta = cesta.filter(articulo => articulo.id !== id);
-    }
-
-    function vaciarCesta(x) {
-      x = [];
-      return x;
-
-    }
-  </script>
-</head>
-
-<body onload="menu();"></body>
-
+  <body onload="menu();"></body>
 </html>
