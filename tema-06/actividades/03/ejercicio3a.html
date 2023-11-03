@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <script>
+      function mostrar() {
+
+        class Empleado {
+            #edad;
+
+          constructor(nombre, apellido, edad) {
+            this.nombre = nombre;
+            this.apellido = apellido;
+            this.#edad = edad; // Variable privada
+            this.nombreCompleto = function ( ) {return this.nombre + " " + this.apellido}
+          }
+          #muestra(){
+            return this.#edad;
+          }
+          muestraEdad(){
+            return this.#muestra();
+          }
+        }
+
+        class Profesor extends Empleado {
+
+          constructor(nombre, apellido, edad, cargo) {
+            super(nombre, apellido, edad);
+            this.cargo = cargo;
+          }
+          muestraCargo() {
+            return this.cargo;
+            };
+
+        }
+
+        // Instanciar un objeto Profesor
+        var profesor1 = new Profesor(
+          "Juan",
+          "Perez",
+          35,
+          "Profesor de Matemáticas"
+        );
+
+        // Mostrar en una ventana emergente (alert)
+        alert("Nombre: " + profesor1.nombreCompleto() + ", Edad: " + profesor1.muestraEdad() + ", Cargo: " + profesor1.cargo);
+      }
+    </script>
+  </head>
+  <body onload="mostrar();"></body>
+</html>

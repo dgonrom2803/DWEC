@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <script>
+    class Articulo {
+      constructor(id, nombre, precio, cantidad) {
+        this.id = id;
+        this.nombre = nombre;
+        this.precio = precio;
+        this.cantidad = cantidad;
+        this.subtotal = precio * cantidad;
+      }
+    }
+
+    class Cesta {
+      constructor() {
+        this.cesta = [];
+      }
+
+      verCesta() {
+        let total = 0;
+        let mensaje =
+          "Cesta: \nID:     -      Nombre:      -      Precio:      -    Cantidad:      -     Subtotal:\n"  + "----------------------------------------------------------------------------\n";
+
+        for (let i = 0; i < this.cesta.length; i++) {
+          if (this.cesta[i].id !== 0) {
+            mensaje +=
+              this.cesta[i].id +
+              "                   " +
+              this.cesta[i].nombre +
+              "                    " +
+              this.cesta[i].precio + "€" +
+              "                       " +
+              this.cesta[i].cantidad +
+              "                       " +
+              this.cesta[i].subtotal + "€"+
+              "\n"+ "----------------------------------------------------------------------------\n";
+          }
+          total += this.cesta[i].subtotal;
+        }
+
+        alert(mensaje + "                                                                                TOTAL: " + total + "€");
+        return mensaje;
+      }
+
+      insertarArticulo() {
+        var id = this.cesta.length + 1;
+        var nombre = prompt("Introduce el nombre del articulo");
+        var precio = prompt("Introduce el precio del articulo");
+        var cantidad = prompt("Introduce la cantidad de articulos");
+
+        var articulo = new Articulo(id, nombre, precio, cantidad);
+        this.introducir(articulo);
+      }
+
+      introducir(articulo) {
+        this.cesta.push(articulo);
+      }
+
+      borrarArticulo() {
+        var id = Number(prompt("Introduce el ID del articulo a borrar"));
+        for (var i = 0; i < this.cesta.length; i++) {
+          if (this.cesta[i].id === id) {
+            this.cesta[i].id = 0;
+            this.cesta[i].subtotal = 0;
+          }
+        }
+      }
+
+      vaciarCesta() {
+        this.cesta.length = 0;
+      }
+
+      menu() {
+        let opcion;
+
+        while (opcion !== "5") {
+          opcion = prompt(
+            "Elige una opcion:\n 1. Ver cesta.\n 2. Insertar un articulo.\n 3. Borrar un articulo.\n 4. Vaciar cesta\n 5. Finalizar"
+          );
+          if (opcion === null) return;
+
+          switch (opcion) {
+            case "1":
+              this.verCesta();
+              break;
+            case "2":
+              this.insertarArticulo();
+              break;
+            case "3":
+              this.borrarArticulo();
+              break;
+            case "4":
+              this.vaciarCesta();
+              break;
+            case "5":
+              alert("Programa finalizado");
+              return;
+            default:
+              break;
+          }
+        }
+      }
+    }
+
+    var miCesta = new Cesta();
+  </script>
+</head>
+
+<body onload="miCesta.menu();"></body>
+</html>
