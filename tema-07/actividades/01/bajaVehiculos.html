@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Solicitud de baja de vehiculos</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
+    <script charset="UTF-8" src="bajaVehiculos.js"></script>
+  </head>
+  <body>
+    <form id="form1" class="was-validated">
+      <div class="container text-left">
+        <h1>Solicitud de baja de vehículos</h1>
+        <br />
+        <h3 class="pb-3 mb-4 border-bottom">Datos del vehiculo</h3>
+        <div class="pb-3 mb-4 border-bottom">
+          <div class="row align-items-start">
+            <div class="col-3">
+              <label>Matricula:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="matricula"
+                name="matricula"
+                pattern="^[0-9]{4}[TRWAGMYFPDXBNJZSQVHLCKET]{3}$"
+                required
+              />
+            </div>
+            <div class="col-3">
+              <label>Fecha matriculación:</label>
+              <input
+                type="date"
+                class="form-control"
+                id="fecha"
+                name="fecha"
+                required
+              />
+            </div>
+            <div class="col">
+              <label>6 últimos dígitos(nº bastidor):</label>
+              <input
+                type="text"
+                class="form-control"
+                id="bast"
+                name="bast"
+                pattern="^[0-9]{6}$"
+                required
+              />
+            </div>
+          </div>
+        </div>
+        <h3 class="pb-3 mb-4 border-bottom">Datos del titular</h3>
+        <div class="pb-3 mb-4 border-bottom">
+          <div class="row align-items-start">
+            <div class="col-3">
+              <label>Nombre:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="nombre"
+                name="nombre"
+                required
+              />
+            </div>
+            <div class="col-3">
+              <label>Apellidos:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="apellidos"
+                name="apellidos"
+                required
+              />
+            </div>
+            <div class="col">
+              <label>Domicilio:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="domicilio"
+                name="domicilio"
+                required
+              />
+            </div>
+          </div>
+        </div>
+        <br>
+        <div class="pb-3 mb-4 border-bottom">
+          <div class="row align-items-start">
+            <div class="col-3">
+              <label>DNI:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="dni"
+                name="dni"
+                pattern="^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKET]$"
+                required
+              />
+            </div>
+            <div class="col-3">
+              <label>Correo electrónico:</label>
+              <input
+                type="email"
+                class="form-control"
+                id="mail"
+                name="mail"
+                required
+              />
+            </div>
+            <div class="col-3">
+              <label>Tlf:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="telefono"
+                name="telefono"
+                pattern="^[0-9]{9}$"
+                required
+              />
+            </div>
+            <div class="col-3">
+              <fieldset class="row mb-3">
+                <label>Tipo de baja:</label>
+                <div class="col-sm-10">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="bajas"
+                      id="temporal"
+                      value="option1"
+                    />
+                    <label class="form-check-label" for="temporal">
+                      Temporal
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="bajas"
+                      id="definitiva"
+                      value="option2"
+                    />
+                    <label class="form-check-label" for="definitiva">
+                      Definitiva
+                    </label>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+        <br />
+        <button id="bot" type="submit" class="btn btn-primary" name="bot">
+          Enviar
+        </button>
+      </div>
+    </form>
+  </body>
+</html>
