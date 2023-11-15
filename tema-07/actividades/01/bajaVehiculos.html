@@ -16,42 +16,65 @@
     />
     <script>
       class Vehiculo {
-        constructor() {
-        }
-
-        validaMail() {
-          var email = this.emailTitular;
-          if (email.validity.typeMismatch) {
-            email.setCustomValidity("¡Correo erróneo!");
-          } else {
-            email.setCustomValidity("");
+          constructor() {
+              this.#fEvento();
           }
-        }
 
-        validaMatricula() {
-          var matri = this.matricula;
+          #validaMatricula() {
+              var matricula = document.getElementById("matricula");
 
-          if (matri.validity.patternMismatch) {
-            matri.setCustomValidity(
-              "¡Matrícula incorrecta!\nFormato: 0000 + AAA"
-            );
-          } else {
-            matri.setCustomValidity("");
+              if (matricula.validity.patternMismatch) {
+                  matricula.setCustomValidity("¡Matrícula Incorrecta!\nFormato: 1234 + ABC");
+              } else {
+                  matricula.setCustomValidity("");
+              }
           }
-        }
 
-        cambiaEtiquetaDNI() {}
+          #validaEmail() {
+              var email = document.getElementById("mail");
 
-        fEvento() {
-          var bot = document.getElementById("bot");
-          var matri = this.matricula;
-          bot.addEventListener("click", this.validaMail());
-          matri.addEventListener("keyup", this.validaMatricula().bind(this));
-        }
+              if (email.validity.typeMismatch) {
+                  email.setCustomValidity("¡Correo erróneo!");
+
+              } else {
+                  email.setCustomValidity("");
+
+              }
+          }
+
+          #editaDNI() {
+
+              var dni = document.getElementById('dni')
+
+              if (dni.validity.patternMismatch) {
+                  dni.setCustomValidity("¡Formato del Dni incorrecto!");
+
+              } else {
+                  dni.setCustomValidity("");
+
+              }
+
+              document.getElementById('idLabelDNI').innerText = 'Editando Id...';
+              
+          }
+
+          #fEvento() {
+
+              var bot = document.getElementById("bot");
+              bot.addEventListener('click', this.#validaMatricula.bind(this));
+              bot.addEventListener('click', this.#validaEmail.bind(this));
+
+              var inputDNI = document.getElementById("dni");
+              inputDNI.addEventListener("focus", this.#editaDNI.bind(this));
+
+          }
       }
-      var vehiculo = new Vehiculo();
-      window.onload = vehiculo.fEvento(); // Necesario esperar que se carguen los elementos HTML
-    </script>
+
+      window.onload = function () {
+          new Vehiculo();
+      };
+
+  </script>
   </head>
   <body>
     <form id="form1" class="was-validated">
@@ -66,7 +89,7 @@
               <input
                 type="text"
                 class="form-control"
-                id="matric"
+                id="matricula"
                 name="matricula"
                 pattern="^[0-9]{4}[ABCDEFGHIJKLMNOPQRSTUVWXYZ]{3}$"
                 required
@@ -134,7 +157,7 @@
         <div class="pb-3 mb-4 border-bottom">
           <div class="row align-items-start">
             <div class="col-3">
-              <label>DNI:</label>
+              <label id="idLabelDNI">DNI:</label>
               <input
                 type="text"
                 class="form-control"
