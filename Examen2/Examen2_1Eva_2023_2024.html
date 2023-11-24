@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="UTF-8" >
+    <link 
+        rel="stylesheet" 
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+    >
+    <style type="text/css">
+        input:invalid {border: 1px solid red; }
+        input:valid {border: 1px solid green;}   
+    </style>
+<script>
+class Articulo {
+        constructor(id, cod, color, piel) {
+          this.id = id;
+          this.cod = cod;
+          this.color = color;
+          this.piel = piel;
+        }
+      }
+
+      class Cartera extends Articulo {
+        constructor(id, cod, color, piel, bolsillo) {
+          super(id, cod, color, piel);
+          this.bolsillo = bolsillo;
+        }
+      }
+
+      class Base {
+        constructor() {
+          this.articulos = [];
+          this.#fEvento();
+        }
+
+        getArticulos() {
+          return this.articulos;
+        }
+
+        #fEvento() {
+          var formulario = document.getElementById("f1");
+          formulario.addEventListener("submit", this.#alta.bind(this));
+        }
+
+        #alta(evento) {
+          evento.preventDefault();
+          var id = this.articulos.length + 1;
+          var cod = document.getElementById("cod").value;
+          var color = document.getElementById("color").value;
+          var piel = document.getElementById("piel").value;
+          var bolsillo = document.getElementById("bolsillo").value;
+          var cartera = new Cartera(id, cod, color, piel, bolsillo);
+          this.articulos.push(cartera);
+          
+          var carteras = document.getElementById("carteras");
+          var articulos = this.getArticulos();
+
+          while (carteras.firstChild) {
+            carteras.removeChild(carteras.firstChild);
+          }
+
+          for (let i = 0; i < articulos.length; i++) {
+            var newRow = document.createElement("tr");
+
+            var idCell = document.createElement("td");
+            idCell.textContent = articulos[i].id;
+
+            var codDiv = document.createElement("td");
+            codDiv.textContent = articulos[i].cod;
+
+            var colorDiv = document.createElement("td");
+            colorDiv.textContent = articulos[i].color;
+
+            var pielDiv = document.createElement("td");
+            pielDiv.textContent = articulos[i].piel;
+
+            var bolsilloDiv = document.createElement("td");
+            bolsilloDiv.textContent = articulos[i].bolsillo;
+
+            newRow.appendChild(idCell);
+            newRow.appendChild(codDiv);
+            newRow.appendChild(colorDiv);
+            newRow.appendChild(pielDiv);
+            newRow.appendChild(bolsilloDiv);
+
+            carteras.appendChild(newRow);
+          }
+        }
+      }
+
+      window.onload = function () { new Base(); };
+</script>
+</head>
+<body>    
+    <div class="container">
+        <div class="row" >       
+            <h2>Alta de artículos: Carteras </h2>
+            <br><br><br>
+        </div>  
+        <form id="f1">       
+            <div  >
+                <div class="col-md-3">
+                    <div class="form-group">
+                            <label >Cod:
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                id="cod"  
+                                placeholder="5 dígitos + A"  
+                                pattern="^[0-9]{5}[A]$" 
+                                name="cod" 
+                                required>
+                            </label> 
+
+                    </div> 
+                </div>      
+            </div>
+
+            <div >   
+                <div class="col-md-3">
+                        <div class="form-group">
+                                <label>Color:
+                                    <input 
+                                        type="text" 
+                                        class="form-control" 
+                                        id="color"  
+                                        name="color"   
+                                        required>
+                                </label>
+                        </div> 
+                </div> 
+            </div>
+            <div >   
+                <div class="col-md-3">
+                        <div class="form-group">
+                                <label>Piel:
+                                    <input 
+                                        type="text" 
+                                        class="form-control" 
+                                        id="piel"  
+                                        name="piel"   
+                                        required>
+                                </label>
+                        </div> 
+                </div> 
+            </div>
+            <div >   
+                <div class="col-md-3">
+                        <div class="form-group">
+                                <label>Bolsillo:
+                                    <input 
+                                        type="text" 
+                                        class="form-control"  
+                                        id="bolsillo"  
+                                        name="bolsillo" 
+                                        placeholder="SI/NO"   
+                                        required>
+                                </label>
+                        </div> 
+                </div> 
+            </div>
+            
+            <br>
+            <button 
+                id="bot" 
+                type="submit" 
+                class="btn btn-primary">
+                Dar de alta
+            </button>     
+        </form>
+        <br><br><br>
+        <div class="row" >         
+            <h2>Stock carteras </h2>
+                <table  class="table table-striped">
+                    <thead>
+                        <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Cod.</th>
+                        <th scope="col">Color</th>
+                        <th scope="col">Piel</th>
+                        <th scope="col">Bolsillo</th>
+                        </tr>
+                    </thead>
+                    <!-- Cuerpo donde añadir registros de carteras -->
+                    <tbody id="carteras"></tbody>
+                </table>
+        </div>
+    
+    </div>  
+  
+</body>
+</html>
