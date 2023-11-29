@@ -24,23 +24,33 @@
         align-items: baseline;
       }
 
-      #cesta {
-        position: sticky;
-        top: 0;
-      
+      .main-container {
+        display: flex;
+        gap: 1em;
+        justify-content: space-between;
       }
 
-      table {
-        max-width: 600px;
-        margin-right: auto;
-        margin-left: auto;
+      .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1em;
+        width: 50%; /* Ajusta el ancho del contenedor de cards según tus necesidades */
       }
 
-      /* Estilos para centrar la información de cada producto */
-      td {
-        text-align: center;
-        vertical-align: middle;
+      .card {
+        width: calc(30% - 1em);
+        margin-bottom: 1em;
+        margin-left: 1em;
+
       }
+
+      .card-img-top {
+        width: 150px; /* Establece el ancho de la imagen según tus necesidades */
+        height: 150px; /* Establece la altura de la imagen según tus necesidades */
+        object-fit: cover; /* Mantiene la proporción y recorta la imagen si es necesario */
+        align-self: center;
+      }
+
     </style>
     <script>
       class Producto {
@@ -73,42 +83,12 @@
       class Catalogo {
         constructor() {
           this.productos = [
-            new Producto(
-              1,
-              "Bolso",
-              20,
-              "https://source.unsplash.com/random/500x500/?handbag"
-            ),
-            new Producto(
-              2,
-              "Móvil",
-              120,
-              "https://source.unsplash.com/random/500x500/?iphone"
-            ),
-            new Producto(
-              3,
-              "Taza",
-              10,
-              "https://source.unsplash.com/random/500x500/?cup"
-            ),
-            new Producto(
-              4,
-              "Zapatos",
-              50.5,
-              "https://source.unsplash.com/random/500x500/?shoe"
-            ),
-            new Producto(
-              5,
-              "Vestido",
-              30,
-              "https://source.unsplash.com/random/500x500/?dress"
-            ),
-            new Producto(
-              6,
-              "Cámara",
-              100,
-              "https://source.unsplash.com/random/500x500/?camera"
-            ),
+            new Producto(1, "Bolso", 20, "https://source.unsplash.com/random/100x100/?handbag"),
+            new Producto(2, "Móvil", 120, "https://source.unsplash.com/random/100x100/?iphone"),
+            new Producto(3, "Taza", 10, "https://source.unsplash.com/random/100x100/?cup"),
+            new Producto(4, "Zapatos", 50.5, "https://source.unsplash.com/random/100x100/?shoe"),
+            new Producto(5, "Vestido", 30, "https://source.unsplash.com/random/100x100/?dress"),
+            new Producto(6, "Cámara", 100, "https://source.unsplash.com/random/100x100/?camera"),
           ];
         }
 
@@ -125,38 +105,41 @@
         const catalogo = new Catalogo();
         const contProductos = document.getElementById("contProductos");
 
-        // Renderizar productos dinámicamente
+        // Renderizar productos dinámicamente como cards
         const productos = catalogo.getProductos();
         for (let i = 0; i < productos.length; i++) {
-          // Crear una nueva fila cada tres productos
-          if (i % 3 === 0) {
-            var newRow = document.createElement("tr");
-            newRow.classList.add("align-items-start");
-            contProductos.appendChild(newRow);
-          }
-
-          const productoDiv = document.createElement("td");
+          const card = document.createElement("div");
+          card.classList.add("card");
 
           const img = document.createElement("img");
           img.src = productos[i].imagen_url;
           img.alt = productos[i].nombre;
-          img.style.width = "100px"; // Establece el ancho de la imagen según tus necesidades
+          img.classList.add("card-img-top");
 
-          const nombreDiv = document.createElement("div");
-          nombreDiv.textContent = productos[i].nombre;
+          const cardBody = document.createElement("div");
+          cardBody.classList.add("card-body");
 
-          const precioDiv = document.createElement("div");
-          precioDiv.textContent = `€${productos[i].precio.toFixed(2)}`;
+          const title = document.createElement("h5");
+          title.classList.add("card-title");
+          title.textContent = productos[i].nombre;
 
-          productoDiv.appendChild(img);
-          productoDiv.appendChild(nombreDiv);
-          productoDiv.appendChild(precioDiv);
+          const text = document.createElement("p");
+          text.classList.add("card-text");
+          text.textContent = `€${productos[i].precio.toFixed(2)}`;
 
-          // Agregar el borde derecho a cada celda (td) excepto la última
+          const btn = document.createElement("a");
+          btn.href = "#";
+          btn.classList.add("btn", "btn-primary");
+          btn.textContent = "Agregar a la cesta";
 
-          productoDiv.style.border = "1px solid #dee2e6";
+          cardBody.appendChild(title);
+          cardBody.appendChild(text);
+          cardBody.appendChild(btn);
 
-          newRow.appendChild(productoDiv);
+          card.appendChild(img);
+          card.appendChild(cardBody);
+
+          contProductos.appendChild(card);
         }
       };
     </script>
@@ -168,10 +151,10 @@
       >
     </header>
     <hr />
-    <div class="tablas-container">
-      <table class="table table-bordered" id="contProductos">
-        <!-- Contenedor dinámico de productos -->
-      </table>
+    <div class="main-container">
+      <div class="card-container" id="contProductos">
+        <!-- Contenedor dinámico de productos como cards -->
+      </div>
       <div class="col">
         <table class="table" id="cesta">
           <i class="bi bi-basket" style="font-size: 2rem">
