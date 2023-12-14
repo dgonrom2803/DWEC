@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ejemplo Cesta de la compra</title>
+    <!-- <titulo>Ejemplo Cesta de la compra</titulo> -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -16,14 +16,7 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
     />
     <style>
-      .tablas-container {
-        display: flex;
-        padding: 15px;
-        margin: 20px;
-        gap: 1em;
-        align-items: baseline;
-      }
-
+      
       .main-container {
         display: flex;
         gap: 1em;
@@ -41,7 +34,7 @@
         width: calc(30% - 1em);
         margin-bottom: 1em;
         margin-left: 1em;
-
+        align-self: center;
       }
 
       .card-img-top {
@@ -50,7 +43,6 @@
         object-fit: cover; /* Mantiene la proporción y recorta la imagen si es necesario */
         align-self: center;
       }
-
     </style>
     <script>
       class Producto {
@@ -67,16 +59,52 @@
           this.productos = [];
         }
 
-        agregarProducto(producto) {
-          this.productos.push(producto);
+        agregarProducto(id, cantidad) {
+          const productoExistente = this.productos.find((product) => product.id === id);
+          if (productoExistente) {
+            // Si el producto ya está en la cesta, aumenta la cantidad
+            productoExistente.cantidad += cantidad;
+          } else {
+            // Si el producto no está en la cesta, agrégalo con cantidad especificada
+            const producto = miCatalogo.buscarProducto(id);
+            if (producto) {
+              producto.cantidad = cantidad;
+              this.productos.push(producto);
+            }
+          }
+
+          // Actualiza la vista de la cesta
+          this.actualizarCesta();
         }
 
         calcularTotal() {
           var total = 0;
           for (var producto of this.productos) {
-            total += producto.precio;
+            total += producto.precio * producto.cantidad;
           }
           return total;
+        }
+
+        actualizarCesta() {
+          const cestaTable = document.getElementById("cesta-body");
+
+          // Limpia la tabla antes de actualizar
+          cestaTable.innerHTML = "";
+
+          // Lógica para actualizar la tabla de la cesta con los productos actuales en miCesta
+          const productosEnCesta = this.productos;
+          for (let i = 0; i < productosEnCesta.length; i++) {
+            const producto = productosEnCesta[i];
+
+            const row = cestaTable.insertRow();
+            row.innerHTML = `
+              <td>${producto.id}</td>
+              <td>${producto.nombre}</td>
+              <td>${producto.cantidad}</td>
+              <td>${producto.precio.toFixed(2)}</td>
+              <td>${(producto.precio * producto.cantidad).toFixed(2)}</td>
+            `;
+          }
         }
       }
 
@@ -90,6 +118,9 @@
             new Producto(5, "Vestido", 30, "https://source.unsplash.com/random/100x100/?dress"),
             new Producto(6, "Cámara", 100, "https://source.unsplash.com/random/100x100/?camera"),
           ];
+
+          // Instancia de Cesta
+          this.miCesta = new Cesta();
         }
 
         getProductos() {
@@ -99,48 +130,78 @@
         buscarProducto(id) {
           return this.productos.find((producto) => producto.id === id);
         }
+
+        renderizarProductos() {
+
+          const contProductos = document.getElementById("contProductos");
+          const cestaTable = document.getElementById("cesta-body");
+
+          // Renderizar productos dinámicamente como cards
+          const productos = this.getProductos();
+          for (let i = 0; i < productos.length; i++) {
+            const card = document.createElement("div");
+            card.classList.add("card");
+
+            //Imagen
+            const img = document.createElement("img");
+            img.src = productos[i].imagen_url;
+            img.alt = productos[i].nombre;
+            img.classList.add("card-img-top");
+
+            //Cuerpo de la tarjeta
+            const cardBody = document.createElement("div");
+            cardBody.classList.add("card-body");
+
+            //Nombre
+            const titulo = document.createElement("h5");
+            titulo.classList.add("card-title");
+            titulo.textContent = productos[i].nombre;
+
+            //Precio
+            const text = document.createElement("p");
+            text.classList.add("card-text");
+            text.textContent = `€${productos[i].precio.toFixed(2)}`;
+
+            // Input para seleccionar la cantidad
+            const cantidadInput = document.createElement("input");
+            cantidadInput.type = "number";
+            cantidadInput.min = 1; // Mínimo de productos a añadir
+            cantidadInput.value = 1; // Valor inicial
+            cantidadInput.classList.add("form-control", "mb-2");
+
+            // Botón para agregar a la cesta
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.classList.add("btn", "btn-primary");
+            btn.textContent = "Añadir";
+
+            // Añade un listener al botón para manejar la adición del producto con la cantidad seleccionada
+            btn.addEventListener("click", () => {
+              const cantidad = parseInt(cantidadInput.value, 10);
+              const id = productos[i].id;
+              this.miCesta.agregarProducto(id, cantidad);
+            });
+
+            // Agrega los elementos al cuerpo de la tarjeta
+            cardBody.appendChild(titulo);
+            cardBody.appendChild(text);
+            cardBody.appendChild(cantidadInput);
+            cardBody.appendChild(btn);
+
+            // Colocación de los elementos en el contenedor correspondiente
+            card.appendChild(img);
+            card.appendChild(cardBody);
+
+            contProductos.appendChild(card);
+          }
+        }
       }
 
+      //Instanciamos
+      var miCatalogo = new Catalogo();
+
       window.onload = function () {
-        const catalogo = new Catalogo();
-        const contProductos = document.getElementById("contProductos");
-
-        // Renderizar productos dinámicamente como cards
-        const productos = catalogo.getProductos();
-        for (let i = 0; i < productos.length; i++) {
-          const card = document.createElement("div");
-          card.classList.add("card");
-
-          const img = document.createElement("img");
-          img.src = productos[i].imagen_url;
-          img.alt = productos[i].nombre;
-          img.classList.add("card-img-top");
-
-          const cardBody = document.createElement("div");
-          cardBody.classList.add("card-body");
-
-          const title = document.createElement("h5");
-          title.classList.add("card-title");
-          title.textContent = productos[i].nombre;
-
-          const text = document.createElement("p");
-          text.classList.add("card-text");
-          text.textContent = `€${productos[i].precio.toFixed(2)}`;
-
-          const btn = document.createElement("a");
-          btn.href = "#";
-          btn.classList.add("btn", "btn-primary");
-          btn.textContent = "Agregar a la cesta";
-
-          cardBody.appendChild(title);
-          cardBody.appendChild(text);
-          cardBody.appendChild(btn);
-
-          card.appendChild(img);
-          card.appendChild(cardBody);
-
-          contProductos.appendChild(card);
-        }
+        miCatalogo.renderizarProductos();
       };
     </script>
   </head>
@@ -156,11 +217,13 @@
         <!-- Contenedor dinámico de productos como cards -->
       </div>
       <div class="col">
-        <table class="table" id="cesta">
-          <i class="bi bi-basket" style="font-size: 2rem">
-            <span class="fs-2">Cesta</span>
-          </i>
+        <table class="table">
           <thead>
+            <tr>
+              <i class="bi bi-basket" style="font-size: 2rem">
+                <span class="fs-2">Cesta</span>
+              </i>
+            </tr>
             <tr>
               <th scope="col">Cod</th>
               <th scope="col">Nombre</th>
@@ -169,7 +232,14 @@
               <th scope="col">Subtotal</th>
             </tr>
           </thead>
-          <hr />
+          <tbody id="cesta-body">
+            <!-- Filas se agregarán dinámicamente -->
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="4" align="right">Total a pagar:</td>
+            </tr>
+          </tfoot>
         </table>
       </div>
     </div>
