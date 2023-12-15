@@ -3,20 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- <titulo>Ejemplo Cesta de la compra</titulo> -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
       crossorigin="anonymous"
     />
-
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
     />
     <style>
-      
       .main-container {
         display: flex;
         gap: 1em;
@@ -27,7 +24,7 @@
         display: flex;
         flex-wrap: wrap;
         gap: 1em;
-        width: 50%; /* Ajusta el ancho del contenedor de cards según tus necesidades */
+        width: 50%;
       }
 
       .card {
@@ -38,9 +35,9 @@
       }
 
       .card-img-top {
-        width: 150px; /* Establece el ancho de la imagen según tus necesidades */
-        height: 150px; /* Establece la altura de la imagen según tus necesidades */
-        object-fit: cover; /* Mantiene la proporción y recorta la imagen si es necesario */
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
         align-self: center;
       }
     </style>
@@ -62,18 +59,14 @@
         agregarProducto(id, cantidad) {
           const productoExistente = this.productos.find((product) => product.id === id);
           if (productoExistente) {
-            // Si el producto ya está en la cesta, aumenta la cantidad
             productoExistente.cantidad += cantidad;
           } else {
-            // Si el producto no está en la cesta, agrégalo con cantidad especificada
             const producto = miCatalogo.buscarProducto(id);
             if (producto) {
               producto.cantidad = cantidad;
               this.productos.push(producto);
             }
           }
-
-          // Actualiza la vista de la cesta
           this.actualizarCesta();
         }
 
@@ -85,13 +78,32 @@
           return total;
         }
 
+        calcularTotalConIVA() {
+          const totalSinIVA = this.calcularTotal();
+          const iva = totalSinIVA * 0.21; // 21% de IVA
+          return totalSinIVA + iva;
+        }
+
+        actualizarTotal() {
+          const totalPagar = document.getElementById("total-pagar");
+          if (totalPagar) {
+            const total = this.calcularTotal().toFixed(2);
+            totalPagar.textContent = `€${total}`;
+          }
+        }
+
+        actualizarTotalConIVA() {
+          const totalConIVA = document.getElementById("total-con-iva");
+          if (totalConIVA) {
+            const total = this.calcularTotalConIVA().toFixed(2);
+            totalConIVA.textContent = `€${total}`;
+          }
+        }
+
         actualizarCesta() {
           const cestaTable = document.getElementById("cesta-body");
-
-          // Limpia la tabla antes de actualizar
           cestaTable.innerHTML = "";
 
-          // Lógica para actualizar la tabla de la cesta con los productos actuales en miCesta
           const productosEnCesta = this.productos;
           for (let i = 0; i < productosEnCesta.length; i++) {
             const producto = productosEnCesta[i];
@@ -105,6 +117,9 @@
               <td>${(producto.precio * producto.cantidad).toFixed(2)}</td>
             `;
           }
+
+          this.actualizarTotal();
+          this.actualizarTotalConIVA();
         }
       }
 
@@ -119,7 +134,6 @@
             new Producto(6, "Cámara", 100, "https://source.unsplash.com/random/100x100/?camera"),
           ];
 
-          // Instancia de Cesta
           this.miCesta = new Cesta();
         }
 
@@ -132,63 +146,52 @@
         }
 
         renderizarProductos() {
-
           const contProductos = document.getElementById("contProductos");
           const cestaTable = document.getElementById("cesta-body");
 
-          // Renderizar productos dinámicamente como cards
           const productos = this.getProductos();
           for (let i = 0; i < productos.length; i++) {
             const card = document.createElement("div");
             card.classList.add("card");
 
-            //Imagen
             const img = document.createElement("img");
             img.src = productos[i].imagen_url;
             img.alt = productos[i].nombre;
             img.classList.add("card-img-top");
 
-            //Cuerpo de la tarjeta
             const cardBody = document.createElement("div");
             cardBody.classList.add("card-body");
 
-            //Nombre
             const titulo = document.createElement("h5");
             titulo.classList.add("card-title");
             titulo.textContent = productos[i].nombre;
 
-            //Precio
             const text = document.createElement("p");
             text.classList.add("card-text");
             text.textContent = `€${productos[i].precio.toFixed(2)}`;
 
-            // Input para seleccionar la cantidad
             const cantidadInput = document.createElement("input");
             cantidadInput.type = "number";
-            cantidadInput.min = 1; // Mínimo de productos a añadir
-            cantidadInput.value = 1; // Valor inicial
+            cantidadInput.min = 1;
+            cantidadInput.value = 1;
             cantidadInput.classList.add("form-control", "mb-2");
 
-            // Botón para agregar a la cesta
             const btn = document.createElement("button");
             btn.type = "button";
             btn.classList.add("btn", "btn-primary");
             btn.textContent = "Añadir";
 
-            // Añade un listener al botón para manejar la adición del producto con la cantidad seleccionada
             btn.addEventListener("click", () => {
               const cantidad = parseInt(cantidadInput.value, 10);
               const id = productos[i].id;
               this.miCesta.agregarProducto(id, cantidad);
             });
 
-            // Agrega los elementos al cuerpo de la tarjeta
             cardBody.appendChild(titulo);
             cardBody.appendChild(text);
             cardBody.appendChild(cantidadInput);
             cardBody.appendChild(btn);
 
-            // Colocación de los elementos en el contenedor correspondiente
             card.appendChild(img);
             card.appendChild(cardBody);
 
@@ -197,7 +200,6 @@
         }
       }
 
-      //Instanciamos
       var miCatalogo = new Catalogo();
 
       window.onload = function () {
@@ -213,9 +215,7 @@
     </header>
     <hr />
     <div class="main-container">
-      <div class="card-container" id="contProductos">
-        <!-- Contenedor dinámico de productos como cards -->
-      </div>
+      <div class="card-container" id="contProductos"></div>
       <div class="col">
         <table class="table">
           <thead>
@@ -232,12 +232,15 @@
               <th scope="col">Subtotal</th>
             </tr>
           </thead>
-          <tbody id="cesta-body">
-            <!-- Filas se agregarán dinámicamente -->
-          </tbody>
+          <tbody id="cesta-body"></tbody>
           <tfoot>
             <tr>
               <td colspan="4" align="right">Total a pagar:</td>
+              <td id="total-pagar"></td>
+            </tr>
+            <tr>
+              <td colspan="4" align="right">Total + IVA (21%):</td>
+              <td id="total-con-iva"></td>
             </tr>
           </tfoot>
         </table>
