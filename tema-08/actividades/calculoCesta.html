@@ -3,19 +3,54 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ejemplo Cesta de la compra</title>
+    
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
       crossorigin="anonymous"
     />
-
+    
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
     />
+    <!-- Estilos personalizados -->
+    <style>
+      /* Estilo para el contenedor principal */
+      .main-container {
+        display: flex;
+        gap: 1em;
+        justify-content: space-between;
+      }
+
+      /* Estilos para la disposición de las tarjetas de productos en el catálogo */
+      .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1em;
+        width: 50%;
+      }
+
+      /* Estilos para cada tarjeta de producto en el catálogo */
+      .card {
+        width: calc(30% - 1em);
+        margin-bottom: 1em;
+        margin-left: 1em;
+        align-self: center;
+      }
+
+      /* Estilos para la imagen de la tarjeta de producto */
+      .card-img-top {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        align-self: center;
+      }
+    </style>
+    
     <script>
+      // Clase Producto
       class Producto {
         constructor(id, nombre, precio, imagen_url) {
           this.id = id;
@@ -25,127 +60,246 @@
         }
       }
 
+      // Clase que representa la cesta de compras
       class Cesta {
         constructor() {
           this.productos = [];
         }
 
-        agregarProducto(producto) {
-          this.productos.push(producto);
+        // Método para agregar productos a la cesta
+        agregarProducto(id, cantidad) {
+          const productoExistente = this.productos.find((product) => product.id === id);
+          if (productoExistente) {
+            productoExistente.cantidad += cantidad;
+          } else {
+            const producto = miCatalogo.buscarProducto(id);
+            if (producto) {
+              producto.cantidad = cantidad;
+              this.productos.push(producto);
+            }
+          }
+          this.actualizarCesta();
         }
 
+        // Método para eliminar productos de la cesta
+        eliminarProducto(id) {
+          this.productos = this.productos.filter((product) => product.id !== id);
+          this.actualizarCesta();
+        }
+
+        // Método para calcular el total de la cesta sin IVA
         calcularTotal() {
           var total = 0;
           for (var producto of this.productos) {
-            total += producto.precio;
+            total += producto.precio * producto.cantidad;
           }
           return total;
         }
-      }
-      class Catalogo {
-        constructor() {
-          this.productos = [
-            new Producto(
-              1,
-              "Bolso",
-              20,
-              "https://source.unsplash.com/random/500x500/?handbag"
-            ),
-            new Producto(
-              2,
-              "Móvil",
-              120,
-              "https://source.unsplash.com/random/500x500/?iphone"
-            ),
-            new Producto(
-              3,
-              "Taza",
-              10,
-              "https://source.unsplash.com/random/500x500/?cup"
-            ),
-            new Producto(
-              4,
-              "Zapatos",
-              50.5,
-              "https://source.unsplash.com/random/500x500/?shoe"
-            ),
-            new Producto(
-              5,
-              "Vestido",
-              30,
-              "https://source.unsplash.com/random/500x500/?dress"
-            ),
-            new Producto(
-              6,
-              "Cámara",
-              100,
-              "https://source.unsplash.com/random/500x500/?camera"
-            ),
-          ];
+
+        // Método para calcular el total de la cesta con IVA
+        calcularTotalConIVA() {
+          const totalSinIVA = this.calcularTotal();
+          const iva = totalSinIVA * 0.21; // 21% de IVA
+          return totalSinIVA + iva;
         }
 
+        // Método para actualizar el total de la cesta en la interfaz
+        actualizarTotal() {
+          const totalPagar = document.getElementById("total-pagar");
+          if (totalPagar) {
+            const total = this.calcularTotal().toFixed(2);
+            totalPagar.textContent = `€${total}`;
+          }
+        }
+
+        // Método para actualizar el total con IVA en la interfaz
+        actualizarTotalConIVA() {
+          const totalConIVA = document.getElementById("total-con-iva");
+          if (totalConIVA) {
+            const total = this.calcularTotalConIVA().toFixed(2);
+            totalConIVA.textContent = `€${total}`;
+          }
+        }
+
+        // Método para actualizar la representación visual de la cesta en la interfaz
+        actualizarCesta() {
+          const cestaTable = document.getElementById("cesta-body");
+          cestaTable.innerHTML = "";
+
+          const productosEnCesta = this.productos;
+          for (let i = 0; i < productosEnCesta.length; i++) {
+            const producto = productosEnCesta[i];
+
+            const row = cestaTable.insertRow();
+            row.innerHTML = `
+              <td>${producto.id}</td>
+              <td>${producto.nombre}</td>
+              <td>${producto.cantidad}</td>
+              <td>${producto.precio.toFixed(2)}</td>
+              <td>${(producto.precio * producto.cantidad).toFixed(2)}</td>
+              <td><button class="btn btn-danger btn-sm" onclick="miCatalogo.miCesta.eliminarProducto(${producto.id})">Eliminar</button></td>
+            `;
+          }
+
+          this.actualizarTotal();
+          this.actualizarTotalConIVA();
+        }
+
+        // Método para guardar el estado de la cesta en localStorage
+        guardarEstadoCesta() {
+          const cestaJSON = JSON.stringify(this.productos);
+          localStorage.setItem("cesta", cestaJSON);
+        }
+
+        // Método para recuperar el estado de la cesta desde localStorage
+        recuperarEstadoCesta() {
+          const cestaJSON = localStorage.getItem("cesta");
+          if (cestaJSON) {
+            this.productos = JSON.parse(cestaJSON);
+            this.actualizarCesta();
+          }
+        }
+      }
+
+      // Clase que representa el catálogo de productos
+      class Catalogo {
+        constructor() {
+          // Lista de productos disponibles en el catálogo
+          this.productos = [
+            new Producto(1, "Bolso", 20, "https://source.unsplash.com/random/100x100/?handbag"),
+            new Producto(2, "Móvil", 120, "https://source.unsplash.com/random/100x100/?iphone"),
+            new Producto(3, "Taza", 10, "https://source.unsplash.com/random/100x100/?cup"),
+            new Producto(4, "Zapatos", 50.5, "https://source.unsplash.com/random/100x100/?shoe"),
+            new Producto(5, "Vestido", 30, "https://source.unsplash.com/random/100x100/?dress"),
+            new Producto(6, "Cámara", 100, "https://source.unsplash.com/random/100x100/?camera"),
+          ];
+
+          // Instancia de la cesta de compras
+          this.miCesta = new Cesta();
+        }
+
+        // Método para obtener la lista de productos
         getProductos() {
           return this.productos;
         }
 
+        // Método para buscar un producto por su ID
         buscarProducto(id) {
           return this.productos.find((producto) => producto.id === id);
         }
+
+        // Método para renderizar visualmente los productos en el catálogo
+        renderizarProductos() {
+          const contProductos = document.getElementById("contProductos");
+          const cestaTable = document.getElementById("cesta-body");
+
+          const productos = this.getProductos();
+          for (let i = 0; i < productos.length; i++) {
+            const card = document.createElement("div");
+            card.classList.add("card");
+
+            const img = document.createElement("img");
+            img.src = productos[i].imagen_url;
+            img.alt = productos[i].nombre;
+            img.classList.add("card-img-top");
+
+            const cardBody = document.createElement("div");
+            cardBody.classList.add("card-body");
+
+            const titulo = document.createElement("h5");
+            titulo.classList.add("card-title");
+            titulo.textContent = productos[i].nombre;
+
+            const text = document.createElement("p");
+            text.classList.add("card-text");
+            text.textContent = `€${productos[i].precio.toFixed(2)}`;
+
+            const cantidadInput = document.createElement("input");
+            cantidadInput.type = "number";
+            cantidadInput.min = 1;
+            cantidadInput.value = 1;
+            cantidadInput.classList.add("form-control", "mb-2");
+
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.classList.add("btn", "btn-primary");
+            btn.textContent = "Añadir";
+
+            // EventListener para agregar producto a la cesta
+            btn.addEventListener("click", () => {
+              const cantidad = parseInt(cantidadInput.value, 10);
+              const id = productos[i].id;
+              this.miCesta.agregarProducto(id, cantidad);
+            });
+
+            cardBody.appendChild(titulo);
+            cardBody.appendChild(text);
+            cardBody.appendChild(cantidadInput);
+            cardBody.appendChild(btn);
+
+            card.appendChild(img);
+            card.appendChild(cardBody);
+
+            contProductos.appendChild(card);
+          }
+        }
       }
 
+      // Creación de una instancia del catálogo
+      var miCatalogo = new Catalogo();
+
+      // Recuperar el estado de la cesta desde localStorage al cargar la página
       window.onload = function () {
-            new Catalogo();
-        };
+        miCatalogo.renderizarProductos();
+        miCatalogo.miCesta.recuperarEstadoCesta();
+      };
+
+      // Guardar el estado de la cesta en localStorage antes de descargar la página
+      window.onbeforeunload = function () {
+        miCatalogo.miCesta.guardarEstadoCesta();
+      };
     </script>
-    <style>
-      .tablas-container {
-        display: flex;
-        padding: 15px;
-        margin: 20px;
-        gap: 1em;
-        align-items: baseline;
-      }
-    </style>
   </head>
   <body>
     <header class="align-content-center">
       <i class="bi bi-bag" style="font-size: 3rem">
-        <span class="fs-1">Cálculo de la cesta de la compra</span></i
-      >
+        <span class="fs-1">Cálculo de la cesta de la compra</span></i>
     </header>
     <hr />
-    <div class="tablas-container">
-      <div class="col" id="contProductos">
-        <div class="pb-3 mb-4 border-bottom">
-          <div class="row align-items-start">
-            <div class="col"></div>
-            <div class="col">pr2</div>
-            <div class="col">pr3</div>
-          </div>
-        </div>
-        <div class="pb-3 mb-4 border-bottom">
-          <div class="row align-items-start">
-            <div class="col">pr4</div>
-            <div class="col">pr5</div>
-            <div class="col">pr6</div>
-          </div>
-        </div>
-      </div>
+    <div class="main-container">
+      <!-- Columna izquierda: Catálogo de productos -->
+      <div class="card-container" id="contProductos"></div>
+      <!-- Columna derecha: Cesta de compras en forma de tabla -->
       <div class="col">
         <table class="table">
-          <i class="bi bi-basket" style="font-size: 2rem">
-            <span class="fs-2">Cesta</span>
-          </i>
           <thead>
+            <tr>
+              <i class="bi bi-basket" style="font-size: 2rem">
+                <span class="fs-2">Cesta</span>
+              </i>
+            </tr>
             <tr>
               <th scope="col">Cod</th>
               <th scope="col">Nombre</th>
               <th scope="col">Cantidad</th>
               <th scope="col">Precio (€)</th>
               <th scope="col">Subtotal</th>
+              <th scope="col">Acciones</th>
             </tr>
           </thead>
-          <hr />
+          <!-- Cuerpo de la tabla que se llenará dinámicamente con productos en la cesta -->
+          <tbody id="cesta-body"></tbody>
+          <!-- Pie de la tabla con totales -->
+          <tfoot>
+            <tr>
+              <td colspan="5" align="right">Total:</td>
+              <td id="total-pagar"></td>
+            </tr>
+            <tr>
+              <td colspan="5" align="right">Total a pagar (+ IVA (21%)):</td>
+              <td id="total-con-iva"></td>
+            </tr>
+          </tfoot>
         </table>
       </div>
     </div>
