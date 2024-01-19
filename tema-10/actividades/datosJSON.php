@@ -1,22 +1,28 @@
 <?php
 
+/**
+ * Creamos conexión con base de datos de la cual extraeremos los datos
+ * 
+ */
+
 class RecogerDatos {
-    private $db;
-    private $datoID;
+    public $db;
+    public $datoID;
 
     public function __construct()
     {
-        // Conexión con la base de datos 
+        # Conexión con la base de datos 
         $this->db = new mysqli("localhost", "root", "", "tema10");
 
-        // Recogemos el dato recibido por ajax
-        $this->datoID = isset($_GET['id']) ? $_GET['id'] : '';
+        # Recogemos el dato recibido por ajax
+        $this->datoID = $_GET['id'];
 
-        // Si nuestro id está vacío, entramos en la función para recoger el id y el nombre 
-        // de lo contrario, recogemos los datos de ese id
-        if (empty($this->datoID)) {
+        # Si nuestro id está vacío entramos en la función para recoger el id 
+        # y el nombre 
+        if ($this->datoID == '') {
             $this->recogerIdNombre();
         } else {
+        # Si no entramos para recoger los datos de ese 
             $this->recogerDatos($this->datoID);
         }
     }
@@ -26,6 +32,7 @@ class RecogerDatos {
         $sql = "SELECT id, nombre FROM datos ORDER BY id";
 
         $stmt = $this->db->prepare($sql);
+
         $stmt->execute();
 
         $result = $stmt->get_result();
@@ -45,7 +52,9 @@ class RecogerDatos {
                 WHERE id = ? ORDER BY id";
 
         $stmt = $this->db->prepare($sql);
+
         $stmt->bind_param('i', $id);
+
         $stmt->execute();
 
         $result = $stmt->get_result();

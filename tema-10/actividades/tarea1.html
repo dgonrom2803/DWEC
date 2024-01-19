@@ -1,36 +1,32 @@
 <!DOCTYPE html>
-
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tarea 1 - Tema 10</title>
-
     <style>
-      body {
-        height: 100vh;
-        display: flex;
-        align-items: center; 
-        justify-content: center;
+      table {
+        border-collapse: collapse;
+        width: 100%;
       }
-      #datosCliente {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+
+      th,
+      td {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 5px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .tabla-container {
+        max-width: 500px;
+        margin-top: 10px; 
       }
     </style>
-
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-      crossorigin="anonymous"
-    />
-
     <script>
       class Mostrar {
         constructor() {
-          // this.pintarNombres();
           this.funAjax();
           document.getElementById("datos").addEventListener("change", (e) => {
             this.funTabla(e.target.value);
@@ -44,6 +40,12 @@
               var datos = JSON.parse(this.responseText);
               var select = document.getElementById("datos");
 
+              // Agrega una opción predeterminada
+              var defaultOption = document.createElement("option");
+              defaultOption.value = "";
+              defaultOption.textContent = "Selecciona un nombre";
+              select.appendChild(defaultOption);
+
               for (var i = 0; i < datos.length; i++) {
                 var option = document.createElement("option");
                 option.value = datos[i].id;
@@ -53,50 +55,54 @@
             }
           };
 
-          // Mandamos el id vacío en el inicio de nuestra aplicación
-          // para recoger los datos de los clientes
           xhttp.open("GET", "datosJSON.php?id=", true);
           xhttp.send();
         }
 
         funTabla(id) {
+          // Verifica si se seleccionó un nombre
+          if (id === "") {
+            alert("Por favor, selecciona un nombre.");
+            return;
+          }
+
           var xhttp = new XMLHttpRequest();
           xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
               var datos = JSON.parse(this.responseText);
+              var contenedorTabla = document.getElementById("datosCliente");
+              contenedorTabla.innerHTML = "";
+
+              var tablaContainer = document.createElement("div");
+              tablaContainer.className = "tabla-container";
+
               var tabla = document.createElement("table");
               tabla.setAttribute("border", "1");
-              var thead = document.createElement("thead");
-              tabla.appendChild(thead);
-
-              // var tr = tabla.insertRow();
-              var tr1 = document.createElement("tr");
-              for (var key in datos[0]) {
-                var th = document.createElement("th");
-                th.setAttribute("scope", "col");
-                th.textContent = key;
-                tr1.appendChild(th);
-              }
-              thead.appendChild(tr1);
-
               var tbody = document.createElement("tbody");
               tabla.appendChild(tbody);
-              for (var i = 0; i < datos.length; i++) {
-                var tr2 = tabla.insertRow();
-                for (var key in datos[i]) {
-                  var td = tr2.insertCell();
+
+              for (var key in datos[0]) {
+                var tr = document.createElement("tr");
+
+                var th = document.createElement("th");
+                th.textContent = key;
+                tr.appendChild(th);
+
+                for (var i = 0; i < datos.length; i++) {
+                  var td = document.createElement("td");
                   td.textContent = datos[i][key];
+                  tr.appendChild(td);
                 }
-                tbody.appendChild(tr2);
+
+                tbody.appendChild(tr);
               }
 
-              var contenedorTabla = document.getElementById("datosCliente");
-              contenedorTabla.innerText = "";
-              contenedorTabla.appendChild(tabla);
+              tabla.appendChild(tbody);
+              tablaContainer.appendChild(tabla);
+              contenedorTabla.appendChild(tablaContainer);
             }
           };
 
-          // Mandamos el id recibido para recoger los datos específicos
           xhttp.open("GET", "datosJSON.php?id=" + id, true);
           xhttp.send();
         }
@@ -109,21 +115,14 @@
   </head>
 
   <body>
-    <div
-      class="card border-dark mb3"
-      style="max-width: 30rem; display: block; align-items: center"
-    >
+    <div class="card">
       <div class="card-header">
         <h1>TAREA 1 - TEMA 10.</h1>
       </div>
       <div class="card-body">
-        <select
-          id="datos"
-          class="form-select"
-          aria-label="Default select example"
-        ></select>
-        <hr>
-        <table id="datosCliente"></table>
+        <select id="datos"></select>
+        <hr />
+        <div id="datosCliente" class="tabla-container"></div>
       </div>
     </div>
   </body>
