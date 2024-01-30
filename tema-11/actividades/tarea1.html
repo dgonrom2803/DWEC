@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tarea 1 - Tema 10</title>
+    <style>
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      th,
+      td {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 5px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .tabla-container {
+        max-width: 500px;
+        margin-top: 10px;
+      }
+    </style>
+    <script>
+      class Mostrar {
+        constructor() {
+          this.funFetch();
+          document.getElementById("datos").addEventListener("change", (e) => {
+            this.funTabla(e.target.value);
+          });
+        }
+
+        // Utilizar Fetch con Promesas
+        funFetch() {
+          fetch('datosJSON.php?id=')
+            .then(response => response.json())
+            .then(datos => {
+              var select = document.getElementById("datos");
+
+              var defaultOption = document.createElement("option");
+              defaultOption.value = "";
+              defaultOption.textContent = "Selecciona un nombre";
+              select.appendChild(defaultOption);
+
+              datos.forEach((item) => {
+                var option = document.createElement("option");
+                option.value = item.id;
+                option.textContent = item.nombre;
+                select.appendChild(option);
+              });
+            })
+            .catch(error => console.error('Error en la solicitud Fetch:', error));
+        }
+        funTabla(id) {
+          if (id === "") {
+            alert("Por favor, selecciona un nombre.");
+            return;
+          }
+
+          fetch('datosJSON.php?id=' + id)
+            .then(response => response.json())
+            .then(datos => {
+              var contenedorTabla = document.getElementById("datosCliente");
+              contenedorTabla.innerHTML = "";
+
+              var tablaContainer = document.createElement("div");
+              tablaContainer.className = "tabla-container";
+
+              var tabla = document.createElement("table");
+              tabla.setAttribute("border", "1");
+              var tbody = document.createElement("tbody");
+              tabla.appendChild(tbody);
+
+              for (var key in datos[0]) {
+                var tr = document.createElement("tr");
+
+                var th = document.createElement("th");
+                th.textContent = key;
+                tr.appendChild(th);
+
+                for (var i = 0; i < datos.length; i++) {
+                  var td = document.createElement("td");
+                  td.textContent = datos[i][key];
+                  tr.appendChild(td);
+                }
+
+                tbody.appendChild(tr);
+              }
+
+              tabla.appendChild(tbody);
+              tablaContainer.appendChild(tabla);
+              contenedorTabla.appendChild(tablaContainer);
+            })
+            .catch(error => console.error('Error en la solicitud Fetch:', error));
+        }
+
+        // Utilizar Fetch con Async/Await
+        async funFetchAsync() {
+          try {
+            const response = await fetch('datosJSON.php?id=');
+            const datos = await response.json();
+
+            var select = document.getElementById("datos");
+
+            var defaultOption = document.createElement("option");
+            defaultOption.value = "";
+            defaultOption.textContent = "Selecciona un nombre";
+            select.appendChild(defaultOption);
+
+            datos.forEach((item) => {
+              var option = document.createElement("option");
+              option.value = item.id;
+              option.textContent = item.nombre;
+              select.appendChild(option);
+            });
+          } catch (error) {
+            console.error('Error en la solicitud Fetch con Async/Await:', error);
+          }
+        }
+
+        
+
+        async funTablaAsync(id) {
+          try {
+            if (id === "") {
+              alert("Por favor, selecciona un nombre.");
+              return;
+            }
+
+            const response = await fetch('datosJSON.php?id=' + id);
+            const datos = await response.json();
+
+            var contenedorTabla = document.getElementById("datosCliente");
+            contenedorTabla.innerHTML = "";
+
+            var tablaContainer = document.createElement("div");
+            tablaContainer.className = "tabla-container";
+
+            var tabla = document.createElement("table");
+            tabla.setAttribute("border", "1");
+            var tbody = document.createElement("tbody");
+            tabla.appendChild(tbody);
+
+            for (var key in datos[0]) {
+              var tr = document.createElement("tr");
+
+              var th = document.createElement("th");
+              th.textContent = key;
+              tr.appendChild(th);
+
+              for (var i = 0; i < datos.length; i++) {
+                var td = document.createElement("td");
+                td.textContent = datos[i][key];
+                tr.appendChild(td);
+              }
+
+              tbody.appendChild(tr);
+            }
+
+            tabla.appendChild(tbody);
+            tablaContainer.appendChild(tabla);
+            contenedorTabla.appendChild(tablaContainer);
+          } catch (error) {
+            console.error('Error en la solicitud Fetch con Async/Await:', error);
+          }
+        }
+      }
+
+      window.onload = function () {
+        new Mostrar();
+      };
+    </script>
+  </head>
+
+  <body>
+    <div class="card">
+      <div class="card-header">
+        <h1>TAREA 1 - TEMA 10.</h1>
+      </div>
+      <div class="card-body">
+        <select id="datos"></select>
+        <hr />
+        <div id="datosCliente" class="tabla-container"></div>
+      </div>
+    </div>
+  </body>
+</html>
