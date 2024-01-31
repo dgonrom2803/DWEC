@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tarea 1 Tema 12</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <script>
+      function funAjax(url, fun) {
+        $.get(url, function (obj) {
+          fun(obj);
+          console.log("funAjaxFunciona");
+        });
+      }
+
+      function funSelect(obj) {
+        var object = JSON.parse(obj);
+
+        for (var i = 0; i < object.length; i++) {
+          $("#selectNombres").append(
+            `<option value="${object[i].id}">${object[i].nombre}</option>`
+          );
+          console.log(object[i].nombre);
+        }
+        console.log("funSelectFunciona");
+
+        $("#selectNombres").change(function () {
+          $.get(`datos.php?id=${this.value}`, funTabla);
+        });
+      }
+
+      function funTabla(obj) {
+        var datos = JSON.parse(obj);
+
+        var detalles = $("#detalles");
+
+        var tabla = `
+          <tr>
+            <th>ID</th>
+            <td>${datos[0].id}</td>
+          </tr>
+          <tr>
+            <th>Nombre</th>
+            <td>${datos[0].nombre}</td>
+          </tr>
+          <tr>
+            <th>Apellidos</th>
+            <td>${datos[0].apellidos}</td>
+          </tr>
+          <tr>
+            <th>Ciudad</th>
+            <td>${datos[0].ciudad}</td>
+          </tr>`;
+
+        detalles.html(tabla);
+        detalles.css("border", "2px solid black");
+      }
+
+      $(document).ready(function () {
+        funAjax("datos.php?id", funSelect);
+      });
+    </script>
+  </head>
+  <body>
+    <h1>Tarea 1 Tema 12</h1>
+
+    <label for="selectNombres">Selecciona un nombre:</label>
+    <select id="selectNombres">
+      <option selected disabled>Selecciona un nombre:</option>
+    </select>
+
+    <table id="detalles"></table>
+  </body>
+</html>

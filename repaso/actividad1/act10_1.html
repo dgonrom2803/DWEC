@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tarea 1 Tema 10</title>
+    
+    
+
+    <script>
+      function funAjax(url, fun) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+          if (this.readyState == 4 && this.status == 200) {
+            fun(this);
+          }
+        };
+        xhttp.open("GET", url, true);
+        xhttp.send();
+      }
+
+      function funSelect(xhttp) {
+        var datos = JSON.parse(xhttp.responseText);
+        var selectNombres = document.getElementById("selectNombres");
+
+        for (var i = 0; i < datos.length; i++) {
+          var opcion = document.createElement("option");
+          opcion.value = datos[i].id;
+          opcion.textContent = datos[i].nombre;
+          selectNombres.appendChild(opcion);
+        }
+
+        selectNombres.addEventListener("change", function () {
+          funAjax(`datos.php?id=${this.value}`, funTabla);
+        });
+      }
+
+      function funTabla(xhttp) {
+        var datos = JSON.parse(xhttp.responseText);
+
+        var detalles = document.getElementById("detalles");
+
+        var tabla = `
+                <tr>
+                <th>ID</th>
+                <td>${datos[0].id}</td>
+                </tr>
+                <tr>
+                <th>Nombre</th>
+                <td>${datos[0].nombre}</td>
+                </tr>
+                <tr>
+                <th>Apellidos</th>
+                <td>${datos[0].apellidos}</td>
+                <tr>
+                <th>Ciudad</th>
+                <td>${datos[0].ciudad}</td>
+                </tr>`;
+        detalles.innerHTML = tabla;
+        detalles.style="border: 2px solid black";
+      }
+
+      window.onload = function () {
+        funAjax("datos.php?id", funSelect);
+      };
+    </script>
+  </head>
+  <body>
+    <h1>Tarea 1 Tema 10</h1>
+
+    <label for="selectNombres">Selecciona un nombre:</label>
+    <select id="selectNombres">
+      <option selected disabled>Selecciona un nombre:</option>
+    </select>
+
+    <table id="detalles"></table>
+  </body>
+</html>
