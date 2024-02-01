@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    table,
+    th,
+    td {
+      border: 1px solid black;
+      border-collapse: collapse;
+    }
+    th,
+    td {
+      padding: 5px;
+    }
+  </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script>
+    $(function () {
+      function funAjax(e) {
+        e.preventDefault(); // Para no abandonar la página al enviar formulario.
+
+        // ------- Con Promesas --------------------------------------------------------
+        var url = "examen.php"; // Ruta del script PHP que procesará la petición
+        var equipo1 = document.getElementById("equipo1").value;
+        var equipo2 = document.getElementById("equipo2").value;
+        var data = { equipo1, equipo2 }; // Objeto con los datos a enviar 
+
+        fetch(url, {
+          method: "POST", // Método utilizado
+          body: JSON.stringify(data), // Datos a enviar en formato JSON
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((res) => res.json()) 
+          .then(function (obj) {
+            document.getElementById("datos").innerHTML = ""; // Limpia el contenido de la tabla
+
+            // Itera sobre los datos del equipo1 y equipo2 recibidos
+            obj.equipo1.forEach(function (alumno1, index) {
+              var alumno2 = obj.equipo2[index] || ""; 
+              var row = `<tr><td>${alumno1}</td><td>${alumno2}</td></tr>`; // Crea una fila de la tabla
+              document.getElementById("datos").innerHTML += row; // Agrega la fila a la tabla
+            });
+          })
+          .catch((error) => console.error("Error:", error));
+        // ------------------------------------------------------------------------------
+
+        // ------- Con jQuery ----------------------------------------------------------
+        $.post(
+          "examen.php", // Script PHP que procesará la petición
+          { equipo1: $("#equipo1").val(), equipo2: $("#equipo2").val() }, // Datos a enviar
+          function (obj) {
+            obj = JSON.parse(obj); // Parsea como JSON
+            $("#datos").html(""); // Limpia el contenido de la tabla
+
+            // Itera sobre los datos del equipo1 y equipo2 recibidos
+            obj.equipo1.forEach(function (alumno1, index) {
+              var alumno2 = obj.equipo2[index] || ""; 
+              var row = `<tr><td>${alumno1}</td><td>${alumno2}</td></tr>`; // Crea una fila de la tabla
+              $("#datos").append(row); // Agrega la fila a la tabla
+            });
+          }
+        );
+        // ----------------------------------------------------------------------------
+      }
+
+      
+      $("form").submit(funAjax);
+    });
+  </script>
+</head>
+<body>
+  <form>
+    <label>ID_Equipo1:</label
+    ><input type="number" min="1" id="equipo1" required="required" />
+    <label>ID_Equipo2:</label
+    ><input type="number" min="1" id="equipo2" required="required" />
+    <button type="submit">Enviar</button>
+  </form>
+  <br />
+
+  <!-- Tabla para mostrar los resultados -->
+  <table>
+    <thead>
+      <tr>
+        <th>Equipo1</th>
+        <th>Equipo2</th>
+      </tr>
+    </thead>
+    <tbody id="datos"></tbody>
+  </table>
+</body>
+</html>
