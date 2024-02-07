@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <title>Tarea 1 - Tema 10</title>
+    
+    <!-- Estilos CSS para la tabla y el contenedor -->
+    <style>
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      th,
+      td {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 5px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .tabla-container {
+        max-width: 500px;
+        margin-top: 10px; 
+      }
+    </style>
+    
+
+    <script>
+      // Clase para mostrar los datos
+      class Mostrar {
+        constructor() {
+          // Llama a la función para iniciar la solicitud AJAX y poblar el menú desplegable
+          this.funAjax();
+          
+          // Agrega un event listener al menú desplegable para poblar la tabla
+          document.getElementById("datos").addEventListener("change", (e) => {
+            this.funTabla(e.target.value);
+          });
+        }
+
+        // Función para hacer una solicitud AJAX y obtener datos para poblar el menú desplegable
+        funAjax() {
+          var xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+              var datos = JSON.parse(this.responseText);
+              var select = document.getElementById("datos");
+
+              // Agrega una opción predeterminada al menú desplegable
+              var defaultOption = document.createElement("option");
+              defaultOption.value = "";
+              defaultOption.textContent = "Selecciona un nombre";
+              select.appendChild(defaultOption);
+
+              // Puebla el menú desplegable con opciones basadas en los datos obtenidos
+              for (var i = 0; i < datos.length; i++) {
+                var option = document.createElement("option");
+                option.value = datos[i].id;
+                option.textContent = datos[i].nombre;
+                select.appendChild(option);
+              }
+            }
+          };
+
+          // Especifica los detalles de la solicitud AJAX
+          xhttp.open("GET", "datosJSON.php?id=", true);
+          xhttp.send();
+        }
+
+        // Función para hacer una solicitud AJAX y obtener datos basados en la opción seleccionada en el menú desplegable, y mostrarlos en una tabla
+        funTabla(id) {
+          // Verifica si se seleccionó un nombre
+          if (id === "") {
+            alert("Por favor, selecciona un nombre.");
+            return;
+          }
+
+          var xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+              var datos = JSON.parse(this.responseText);
+              var contenedorTabla = document.getElementById("datosCliente");
+              contenedorTabla.innerHTML = "";
+
+              // Crea un contenedor div para la tabla
+              var tablaContainer = document.createElement("div");
+              tablaContainer.className = "tabla-container";
+
+              // Crea la tabla y el elemento tbody
+              var tabla = document.createElement("table");
+              tabla.setAttribute("border", "1");
+              var tbody = document.createElement("tbody");
+              tabla.appendChild(tbody);
+
+              // Puebla la tabla con datos
+              for (var key in datos[0]) {
+                var tr = document.createElement("tr");
+
+                var th = document.createElement("th");
+                th.textContent = key;
+                tr.appendChild(th);
+
+                for (var i = 0; i < datos.length; i++) {
+                  var td = document.createElement("td");
+                  td.textContent = datos[i][key];
+                  tr.appendChild(td);
+                }
+
+                tbody.appendChild(tr);
+              }
+
+              tabla.appendChild(tbody);
+              tablaContainer.appendChild(tabla);
+              contenedorTabla.appendChild(tablaContainer);
+            }
+          };
+
+          // Especifica los detalles de la solicitud AJAX con el ID seleccionado
+          xhttp.open("GET", "datosJSON.php?id=" + id, true);
+          xhttp.send();
+        }
+      }
+
+      // Inicializa la clase Mostrar cuando la ventana carga
+      window.onload = function () {
+        new Mostrar();
+      };
+    </script>
+  </head>
+
+  <body>
+    
+    <div class="card">
+      <div class="card-header">
+        <h1>TAREA 1 - TEMA 10.</h1>
+      </div>
+      <div class="card-body">
+        <select id="datos"></select>
+        <hr />
+        <!-- Contenedor para mostrar la tabla -->
+        <div id="datosCliente" class="tabla-container"></div>
+      </div>
+    </div>
+  </body>
+</html>

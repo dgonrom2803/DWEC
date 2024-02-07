@@ -40,16 +40,16 @@
             .then(datos => {
               var select = document.getElementById("datos");
 
-              var defaultOption = document.createElement("option");
-              defaultOption.value = "";
-              defaultOption.textContent = "Selecciona un nombre";
-              select.appendChild(defaultOption);
+              var defaultOpcion = document.createElement("opcion");
+              defaultOpcion.value = "";
+              defaultOpcion.textContent = "Selecciona un nombre";
+              select.appendChild(defaultOpcion);
 
               datos.forEach((item) => {
-                var option = document.createElement("option");
-                option.value = item.id;
-                option.textContent = item.nombre;
-                select.appendChild(option);
+                var opcion = document.createElement("opcion");
+                opcion.value = item.id;
+                opcion.textContent = item.nombre;
+                select.appendChild(opcion);
               });
             })
             .catch(error => console.error('Error en la solicitud Fetch:', error));
@@ -105,16 +105,16 @@
 
             var select = document.getElementById("datos");
 
-            var defaultOption = document.createElement("option");
-            defaultOption.value = "";
-            defaultOption.textContent = "Selecciona un nombre";
-            select.appendChild(defaultOption);
+            var defaultOpcion = document.createElement("opcion");
+            defaultOpcion.value = "";
+            defaultOpcion.textContent = "Selecciona un nombre";
+            select.appendChild(defaultOpcion);
 
             datos.forEach((item) => {
-              var option = document.createElement("option");
-              option.value = item.id;
-              option.textContent = item.nombre;
-              select.appendChild(option);
+              var opcion = document.createElement("opcion");
+              opcion.value = item.id;
+              opcion.textContent = item.nombre;
+              select.appendChild(opcion);
             });
           } catch (error) {
             console.error('Error en la solicitud Fetch con Async/Await:', error);
