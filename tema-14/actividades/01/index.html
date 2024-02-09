@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h1>Index.html leído</h1>
+    <button type="button" onclick="funAjax()">Pulsar</button>
+    <div id="datos"></div>
+  </body>
+  <script>
+    function funAjax() {
+      fetch("/pagAjax")
+        .then((response) => response.json())
+        .then((data) => {
+          document.getElementById("datos").innerText = "Hola " + data.NOMBRE;
+        })
+        .catch((error) => console.error("Error:", error));
+    }
+  </script>
+</html>
