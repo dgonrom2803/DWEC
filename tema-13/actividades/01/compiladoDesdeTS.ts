@@ -38,6 +38,5 @@ class Boton {
     }
 }
 
-$(document).ready(function() {
-    const grupoBot = new GrupoBot();
-});
+// window.onload = function() {
+//     const grupoBot = new GrupoBot();}
