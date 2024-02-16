@@ -10,14 +10,35 @@
   <h1>Registros</h1>
 
   <form id="registroForm">
-    <input type="text" name="nombre" placeholder="Nombre">
+    <input type="text" name="nombre" id="nombreInput" placeholder="Nombre">
     <br>
     <br>
-    <input type="text" name="apellido" placeholder="Apellido">
+    <input type="text" name="apellido" id="apellidoInput" placeholder="Apellido">
     <br>
     <br>
-    <button type="submit">Agregar</button>
+    <button type="button" onclick="agregarRegistro()">Agregar</button>
   </form>
-    
+
+  <script>
+    function agregarRegistro() {
+      const nombre = document.getElementById("nombreInput").value;
+      const apellido = document.getElementById("apellidoInput").value;
+
+      // Objeto con los datos a enviar al servidor
+      const registro = { nombre, apellido };
+
+      // Realizar la solicitud al servidor
+      $.ajax({
+        type: 'POST',
+        url: '/agregar-registro',
+        contentType: 'application/json',
+        data: JSON.stringify(registro),
+        success: function(response) {
+          console.log(response);
+          // Aquí puedes agregar lógica adicional para mostrar un mensaje de éxito o actualizar la lista de registros
+        }
+      });
+    }
+  </script>
 </body>
 </html>
