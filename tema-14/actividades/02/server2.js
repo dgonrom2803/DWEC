@@ -18,6 +18,22 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
+// Esta es la ruta para agregar registros
+app.post("/agregar-registro", async (req, res) => {
+  try {
+    const registro = req.body; // Obtiene los datos enviados desde el formulario
+
+    // Ejecuta la función run para insertar el registro en la base de datos
+    const queryAll = await run(registro);
+
+    // Envía la respuesta al cliente con los datos consultados
+    res.json(queryAll);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error interno del servidor" });
+  }
+});
+
 async function run(registro) {
   try {
     const database = client.db('Alumnos');
@@ -35,11 +51,10 @@ async function run(registro) {
     return queryAll;
   } catch (error) {
     console.error(error);
-    // Maneja el error adecuadamente, puedes lanzar una excepción o devolver un valor indicando un error
+    
     throw error;
   }
 }
-
 
 app.listen(3000, () => {
   console.log("Escuchando en puerto 3000");
