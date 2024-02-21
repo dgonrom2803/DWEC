@@ -37,7 +37,12 @@
         data: JSON.stringify(registro),
         success: function(response) {
           console.log(response);
-          // Aquí puedes agregar lógica adicional para mostrar un mensaje de éxito o actualizar la lista de registros
+          var tableHtml = `<tr> <th> Nombre </th> <th> Apellido </th></tr>`;
+              data.forEach(function (obj) {
+                tableHtml += `<tr> <td>${obj.nombre} </td> <td>${obj.apellido} </td></tr>`;
+              });
+              $("#datos").html(tableHtml);
+            
         }
       });
     }
