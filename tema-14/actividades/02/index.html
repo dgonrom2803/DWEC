@@ -19,17 +19,24 @@
     <button type="button" onclick="agregarRegistro()">Agregar</button>
   </form>
 
+  <table id="datos">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Apellido</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+    </tbody>
+  </table>
+
   <script>
-    
-    
     function agregarRegistro() {
       const nombre = document.getElementById("nombreInput").value;
       const apellido = document.getElementById("apellidoInput").value;
-
-      // Objeto con los datos a enviar al servidor
       const registro = { nombre, apellido };
 
-      // Realizar la solicitud al servidor
       $.ajax({
         type: 'POST',
         url: '/agregar-registro',
@@ -37,12 +44,11 @@
         data: JSON.stringify(registro),
         success: function(response) {
           console.log(response);
-          var tableHtml = `<tr> <th> Nombre </th> <th> Apellido </th></tr>`;
-              data.forEach(function (obj) {
-                tableHtml += `<tr> <td>${obj.nombre} </td> <td>${obj.apellido} </td></tr>`;
-              });
-              $("#datos").html(tableHtml);
-            
+          var tableHtml = '';
+          response.forEach(function (obj) {
+            tableHtml += `<tr> <td>${obj.nombre} </td> <td>${obj.apellido} </td></tr>`;
+          });
+          $("#datos tbody").html(tableHtml);
         }
       });
     }
